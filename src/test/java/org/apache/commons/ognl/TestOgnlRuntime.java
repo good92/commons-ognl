@@ -48,6 +48,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static junit.framework.Assert.*;
 
@@ -56,6 +58,7 @@ import static junit.framework.Assert.*;
  */
 public class TestOgnlRuntime
 {
+    private static final Logger log=Logger.getLogger(TestOgnlRuntime.class.getName());
 
     @Test
     public void test_Get_Super_Or_Interface_Class()
@@ -372,7 +375,7 @@ public class TestOgnlRuntime
         throws NoSuchMethodException, CacheException
     {
         Method saveMethod = GenericParent.class.getMethod( "save", Object.class );
-        System.out.println( saveMethod );
+        log.log(Level.INFO, "{0}", saveMethod );
 
         Class<?>[] longClass = OgnlRuntime.findParameterTypes( LongChild.class, saveMethod );
         assertNotSame( longClass[0], String.class );

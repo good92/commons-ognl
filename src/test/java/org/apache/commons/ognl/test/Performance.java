@@ -28,9 +28,12 @@ import org.apache.commons.ognl.test.objects.Bean1;
 import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Performance
 {
+    private static final Logger log=Logger.getLogger(Performance.class.getName());
 
     private static int MAX_ITERATIONS = -1;
 
@@ -201,20 +204,20 @@ public class Performance
             MAX_TIME = maxTime;
             MAX_ITERATIONS = maxIterations;
 
-            System.out.println( "\n\n============================================================================\n" );
+            log.log(Level.INFO, "\n\n============================================================================\n" );
 
             Thread.sleep( 2500 );
             runTests( tests, true );
 
             // Thread.sleep(2000);
 
-            System.out.println( "\n\n============================================================================\n" );
+            log.log(Level.INFO, "\n\n============================================================================\n" );
             // runTests(tests);
 
         }
         catch ( Exception ex )
         {
-            ex.printStackTrace();
+            log.log(Level.WARNING, "",ex);
         }
     }
 
@@ -234,25 +237,36 @@ public class Performance
                     return;
                 }
 
-                System.out.println( ( compiledResults.mvel ? "MVEL" : "OGNL" ) + " " + perf.getName( ) + ": "
-                                        + perf.getExpression( ) );
-                System.out.println(
-                    "       java: " + javaResults.iterations + " iterations in " + javaResults.time + " ms" );
+                if (log.isLoggable(Level.INFO)) log.log(Level.INFO, "{0} {1}: {2}", new Object[]{
+                		compiledResults.mvel ? "MVEL" : "OGNL",
+                		perf.getName(),
+                		perf.getExpression()
+        		});
 
-                System.out.println(
-                    "   compiled: " + compiledResults.iterations + " iterations in " + compiledResults.time + " ms ("
-                        + compiledResults.getFactor( javaResults ) + "java)" );
+                if (log.isLoggable(Level.INFO)) log.log(Level.INFO, "       java: {0} iterations in {1} ms", new Object[]{
+                		javaResults.iterations,
+                		javaResults.time 
+                });
+                
+                if (log.isLoggable(Level.INFO)) log.log(Level.INFO, "   compiled: {0} iterations in {1} ms ({2}java)" , new Object[]{
+                	compiledResults.iterations,
+                	compiledResults.time,
+                	compiledResults.getFactor( javaResults )
+                });
 
-                System.out.println(
-                    "interpreted: " + interpretedResults.iterations + " iterations in " + interpretedResults.time
-                        + " ms (" + interpretedResults.getFactor( javaResults ) + "java)" );
+                
+                if (log.isLoggable(Level.INFO)) log.log(Level.INFO, "interpreted: {0} iterations in {1} ms ({2}java)", new Object[]{
+                	interpretedResults.iterations,
+                	interpretedResults.time,
+                	interpretedResults.getFactor( javaResults )
+                });
 
-                System.out.println( );
+                log.log(Level.INFO,"");
 
             }
             catch ( OgnlException ex )
             {
-                ex.printStackTrace( );
+            	log.log(Level.WARNING,"",ex);
             }
         }
     }
