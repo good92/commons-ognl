@@ -167,8 +167,25 @@ public class OgnlRuntime
      * <strong>Warning:</strong> Calling this too often can be a huge performance drain on your expressions - use with
      * care.
      * </p>
+     * @deprecated Use {@link #clearCache(OgnlCache)} instead
      */
     public static void clearCache()
+    {
+        clearCache(cache);
+    }
+
+    /**
+     * Clears all of the cached reflection information normally used to improve the speed of expressions that operate on
+     * the same classes or are executed multiple times.
+     * <p>
+     * <strong>Warning:</strong> Calling this too often can be a huge performance drain on your expressions - use with
+     * care.
+     * </p>
+     * @param cache TODO
+     * @deprecated Use {@link OgnlCache#clear()}}
+     */
+    @Deprecated
+    public static void clearCache(OgnlCache cache)
     {
         cache.clear();
     }

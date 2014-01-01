@@ -233,6 +233,7 @@ public class TestOgnlRuntime
     public void test_Class_Cache_Inspector()
         throws Exception
     {
+        OgnlCache cache = OgnlRuntime.getCache();
         OgnlRuntime.getCache().clear();
 
         assertEquals( 0, OgnlRuntime.getCache().propertyDescriptorCache.getSize() );
@@ -246,7 +247,7 @@ public class TestOgnlRuntime
         int size = OgnlRuntime.getCache().propertyDescriptorCache.getSize();
         assertTrue( size > 0 );
 
-        OgnlRuntime.clearCache();
+        cache.clear();
         assertEquals( 0, OgnlRuntime.getCache().propertyDescriptorCache.getSize() );
 
         // now register class cache prevention
