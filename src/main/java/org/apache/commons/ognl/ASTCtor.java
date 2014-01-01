@@ -271,7 +271,7 @@ public class ASTCtor
                     {
                         ctor =
                             OgnlRuntime.getConvertedConstructorAndArgs( context, clazz,
-                                                                        OgnlRuntime.getConstructors( clazz ), values,
+                                                                        OgnlRuntime.getConstructors( OgnlRuntime.getCache(), clazz ), values,
                                                                         new Object[values.length] );
                     }
                     

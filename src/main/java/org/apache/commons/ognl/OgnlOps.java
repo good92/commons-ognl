@@ -1023,7 +1023,16 @@ public abstract class OgnlOps
         return compareWithConversion( v1, v2 ) > 0;
     }
 
+    /**
+     * @deprecated Use {@link #in(Object,Object,OgnlCache)} instead
+     */
     public static boolean in( Object v1, Object v2 )
+        throws OgnlException
+    {
+        return in(v1, v2, OgnlRuntime.getCache());
+    }
+
+    public static boolean in( Object v1, Object v2, OgnlCache cache )
         throws OgnlException
     {
         if ( v2 == null ) // A null collection is always treated as empty
@@ -1031,7 +1040,7 @@ public abstract class OgnlOps
             return false;
         }
 
-        ElementsAccessor elementsAccessor = OgnlRuntime.getElementsAccessor( OgnlRuntime.getTargetClass( v2 ) );
+        ElementsAccessor elementsAccessor = OgnlRuntime.getElementsAccessor( OgnlRuntime.getTargetClass( v2 ), cache );
 
         // FIXME O(n) is there a better way?!
         for ( Enumeration<?> e = elementsAccessor.getElements( v2 ); e.hasMoreElements(); )

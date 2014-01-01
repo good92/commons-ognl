@@ -46,7 +46,7 @@ class ASTSelectFirst
     {
         Node expr = children[0];
         List answer = new ArrayList();
-        ElementsAccessor elementsAccessor = OgnlRuntime.getElementsAccessor( OgnlRuntime.getTargetClass( source ) );
+        ElementsAccessor elementsAccessor = OgnlRuntime.getElementsAccessor( OgnlRuntime.getTargetClass( source ), OgnlRuntime.getCache() );
 
         for ( Enumeration e = elementsAccessor.getElements( source ); e.hasMoreElements(); )
         {

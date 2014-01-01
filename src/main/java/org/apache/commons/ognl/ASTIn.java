@@ -50,7 +50,7 @@ class ASTIn
         Object v1 = children[0].getValue( context, source );
         Object v2 = children[1].getValue( context, source );
 
-        return OgnlOps.in( v1, v2 ) ? Boolean.TRUE : Boolean.FALSE;
+        return OgnlOps.in( v1, v2, context.getCache() ) ? Boolean.TRUE : Boolean.FALSE;
     }
 
     public Class getGetterClass()

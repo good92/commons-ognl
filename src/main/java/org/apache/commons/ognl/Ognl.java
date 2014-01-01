@@ -212,6 +212,10 @@ public abstract class Ognl
         return addDefaultContext( root, null, null, null, context );
     }
 
+    public static Map<String, Object> addDefaultContextCache( Object root, OgnlContext context )
+    {
+        return addDefaultContextCache( root, null, null, null, context );
+    }
     /**
      * Appends the standard naming context for evaluating an OGNL expression into the context given so that cached maps
      * can be used as a context.
@@ -270,6 +274,28 @@ public abstract class Ognl
         {
             result = (OgnlContext) context;
         }
+        if ( classResolver != null )
+        {
+            result.setClassResolver( classResolver );
+        }
+        if ( converter != null )
+        {
+            result.setTypeConverter( converter );
+        }
+        if ( memberAccess != null )
+        {
+            result.setMemberAccess( memberAccess );
+        }
+
+        result.setRoot( root );
+        return result;
+    }
+
+    public static Map<String, Object> addDefaultContextCache( Object root, ClassResolver classResolver, TypeConverter converter, MemberAccess memberAccess, OgnlContext context )
+    {
+        OgnlContext result;
+
+        result = context;
         if ( classResolver != null )
         {
             result.setClassResolver( classResolver );
@@ -409,6 +435,11 @@ public abstract class Ognl
         return Ognl.<T> getValue( tree, context, root, null );
     }
 
+    public static <T> T getValueCache( Object tree, OgnlContext context, Object root )
+            throws OgnlException
+        {
+            return Ognl.<T> getValueCache( tree, context, root, null );
+        }
     /**
      * Evaluates the given OGNL expression tree to extract a value from the given root object. The default context is
      * set for the given context and root via <code>addDefaultContext()</code>.
@@ -448,6 +479,30 @@ public abstract class Ognl
         return result;
     }
 
+    @SuppressWarnings( "unchecked" ) // will cause CCE if types are not compatible
+    public static <T> T getValueCache( Object tree, OgnlContext context, Object root, Class<T> resultType )
+        throws OgnlException
+    {
+        T result;
+        OgnlContext ognlContext = (OgnlContext) addDefaultContext( root, context );
+
+        Node node = (Node) tree;
+
+        if ( node.getAccessor() != null )
+        {
+            result = (T) node.getAccessor().get( ognlContext, root );
+        }
+        else
+        {
+            result = (T) node.getValue( ognlContext, root );
+        }
+
+        if ( resultType != null )
+        {
+            result = getTypeConverter( context ).convertValue( context, root, null, null, result, resultType );
+        }
+        return result;
+    }
     /**
      * Gets the value represented by the given pre-compiled expression on the specified root object.
      * 
@@ -499,6 +554,11 @@ public abstract class Ognl
         return Ognl.<T> getValue( expression, context, root, null );
     }
 
+    public static <T> T getValueCache( String expression, OgnlContext context, Object root )
+            throws OgnlException
+        {
+            return Ognl.<T> getValueCache( expression, context, root, null );
+        }
     /**
      * Evaluates the given OGNL expression to extract a value from the given root object in a given context
      * 
@@ -520,6 +580,11 @@ public abstract class Ognl
         return Ognl.<T> getValue( parseExpression( expression ), context, root, resultType );
     }
 
+    public static <T> T getValueCache( String expression, OgnlContext context, Object root, Class<T> resultType )
+            throws OgnlException
+        {
+            return Ognl.<T> getValueCache( parseExpression( expression ), context, root, resultType );
+        }
     /**
      * Evaluates the given OGNL expression tree to extract a value from the given root object.
      * 

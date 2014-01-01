@@ -34,10 +34,11 @@ public class InExpressionTest
         throws Exception
     {
         OgnlContext context = (OgnlContext) Ognl.createDefaultContext( null );
+        context.setCache(new OgnlCache());
         Object node = Ognl.parseExpression( "#name in {\"Greenland\", \"Austin\", \"Africa\", \"Rome\"}" );
         Object root = null;
 
         context.put( "name", "Austin" );
-        assertEquals( Boolean.TRUE, Ognl.getValue( node, context, root ) );
+        assertEquals( Boolean.TRUE, Ognl.getValueCache( node, context, root ) );
     }
 }

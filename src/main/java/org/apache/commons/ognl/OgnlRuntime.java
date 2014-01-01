@@ -126,7 +126,7 @@ public class OgnlRuntime
      */
     private static final String NULL_OBJECT_STRING = "<null>";
 
-    private static OgnlCache cache = new OgnlCache();
+    private static OgnlCache cache;
 
     private static final PrimitiveTypes primitiveTypes = new PrimitiveTypes();
 
@@ -171,7 +171,7 @@ public class OgnlRuntime
      */
     public static void clearCache()
     {
-        clearCache(cache);
+        clearCache(getCache());
     }
 
     /**
@@ -399,7 +399,7 @@ public class OgnlRuntime
     public static Class<?>[] getParameterTypes( Method method )
         throws CacheException
     {
-        return cache.getMethodParameterTypes( method );
+        return getCache().getMethodParameterTypes( method );
     }
 
     /**
@@ -421,7 +421,7 @@ public class OgnlRuntime
         }
 
         GenericMethodParameterTypeCacheEntry key = new GenericMethodParameterTypeCacheEntry( method, type );
-        return cache.getGenericMethodParameterTypes( key );
+        return getCache().getGenericMethodParameterTypes( key );
     }
 
     /**
@@ -433,7 +433,7 @@ public class OgnlRuntime
     public static Class<?>[] getParameterTypes( Constructor<?> constructor )
         throws CacheException
     {
-        return cache.getParameterTypes( constructor );
+        return getCache().getParameterTypes( constructor );
     }
 
     /**
@@ -446,7 +446,7 @@ public class OgnlRuntime
     public static SecurityManager getSecurityManager()
     {
         log.log(Level.WARNING,"@deprecated  use {@link OgnlCache.#getSecurityManager()}", new Throwable());
-        return cache.getSecurityManager();
+        return getCache().getSecurityManager();
     }
 
     /**
@@ -458,7 +458,7 @@ public class OgnlRuntime
     public static void setSecurityManager( SecurityManager securityManager )
     {
         log.log(Level.WARNING,"@deprecated use {@link OgnlCache.#setSecurityManager(SecurityManager)}", new Throwable());
-        cache.setSecurityManager(securityManager);
+        getCache().setSecurityManager(securityManager);
     }
 
     /**
@@ -471,7 +471,7 @@ public class OgnlRuntime
         throws CacheException
     {
         PermissionCacheEntry key = new PermissionCacheEntry( method );
-        return cache.getInvokePermission( key );
+        return getCache().getInvokePermission( key );
     }
 
     public static Object invokeMethod( Object target, Method method, Object[] argsArray )
@@ -479,12 +479,12 @@ public class OgnlRuntime
     {
         Object result;
 
-        if ( cache.getSecurityManager() !=null && !cache.getMethodPerm( method ) )
+        if ( getCache().getSecurityManager() !=null && !getCache().getMethodPerm( method ) )
         {
             throw new IllegalAccessException( "Method [" + method + "] cannot be accessed." );
         }
 
-        MethodAccessEntryValue entry = cache.getMethodAccess( method );
+        MethodAccessEntryValue entry = getCache().getMethodAccess( method );
         if ( !entry.isAccessible() )
         {
             // only synchronize method invocation if it actually requires it
@@ -1015,7 +1015,7 @@ public class OgnlRuntime
             Constructor<?> ctor = null;
             Class<?>[] ctorParameterTypes = null;
             Class<?> target = classForName( context, className );
-            List<Constructor<?>> constructors = getConstructors( target );
+            List<Constructor<?>> constructors = getConstructors( OgnlRuntime.getCache(), target );
 
             for ( Constructor<?> constructor : constructors )
             {
@@ -1154,9 +1154,17 @@ public class OgnlRuntime
         return result;
     }
 
+    /**
+     * @deprecated Use {@link #getConstructors(OgnlCache,Class<?>)} instead
+     */
     public static List<Constructor<?>> getConstructors( Class<?> targetClass )
     {
-        return cache.getConstructor( targetClass );
+        return getConstructors(OgnlRuntime.getCache(), targetClass);
+    }
+
+    public static List<Constructor<?>> getConstructors( OgnlCache cache, Class<?> targetClass )
+    {
+        return getCache().getConstructor( targetClass );
     }
 
     /**
@@ -1170,7 +1178,7 @@ public class OgnlRuntime
             DeclaredMethodCacheEntry.MethodType.STATIC :
             DeclaredMethodCacheEntry.MethodType.NON_STATIC;
         DeclaredMethodCacheEntry key = new DeclaredMethodCacheEntry( targetClass, type );
-        return cache.getMethod( key );
+        return getCache().getMethod( key );
     }
 
     public static List<Method> getMethods( Class<?> targetClass, String name, boolean staticMethods )
@@ -1180,7 +1188,7 @@ public class OgnlRuntime
 
     public static Map<String, Field> getFields( Class<?> targetClass )
     {
-        return cache.getField( targetClass );
+        return getCache().getField( targetClass );
     }
 
     public static Field getField( Class<?> inClass, String name )
@@ -1383,7 +1391,7 @@ public class OgnlRuntime
         for ( String methodName : methodNames )
         {
             DeclaredMethodCacheEntry key = new DeclaredMethodCacheEntry( targetClass );
-            List<Method> methodList = cache.getMethod( key ).get( methodName );
+            List<Method> methodList = getCache().getMethod( key ).get( methodName );
             if ( methodList != null )
             {
                 methods.addAll( methodList );
@@ -1500,7 +1508,7 @@ public class OgnlRuntime
     public static Map<String, PropertyDescriptor> getPropertyDescriptors( Class<?> targetClass )
         throws IntrospectionException, OgnlException
     {
-        return cache.getPropertyDescriptor( targetClass );
+        return getCache().getPropertyDescriptor( targetClass );
     }
 
     /**
@@ -1561,27 +1569,36 @@ public class OgnlRuntime
 
     public static void setMethodAccessor( Class<?> clazz, MethodAccessor accessor )
     {
-        cache.setMethodAccessor( clazz, accessor );
+        getCache().setMethodAccessor( clazz, accessor );
     }
 
     public static MethodAccessor getMethodAccessor( Class<?> clazz )
         throws OgnlException
     {
-        return cache.getMethodAccessor( clazz );
+        return getCache().getMethodAccessor( clazz );
     }
 
     public static void setPropertyAccessor( Class<?> clazz, PropertyAccessor accessor )
     {
-        cache.setPropertyAccessor( clazz, accessor );
+        getCache().setPropertyAccessor( clazz, accessor );
     }
 
     public static PropertyAccessor getPropertyAccessor( Class<?> clazz )
         throws OgnlException
     {
-        return cache.getPropertyAccessor( clazz );
+        return getCache().getPropertyAccessor( clazz );
     }
 
+    /**
+     * @deprecated Use {@link #getElementsAccessor(Class<?>,OgnlCache)} instead
+     */
     public static ElementsAccessor getElementsAccessor( Class<?> clazz )
+        throws OgnlException
+    {
+        return getElementsAccessor(clazz, OgnlRuntime.getCache());
+    }
+
+    public static ElementsAccessor getElementsAccessor( Class<?> clazz, OgnlCache cache )
         throws OgnlException
     {
         return cache.getElementsAccessor( clazz );
@@ -1589,18 +1606,18 @@ public class OgnlRuntime
 
     public static void setElementsAccessor( Class<?> clazz, ElementsAccessor accessor )
     {
-        cache.setElementsAccessor( clazz, accessor );
+        getCache().setElementsAccessor( clazz, accessor );
     }
 
     public static NullHandler getNullHandler( Class<?> clazz )
         throws OgnlException
     {
-        return cache.getNullHandler( clazz );
+        return getCache().getNullHandler( clazz );
     }
 
     public static void setNullHandler( Class<?> clazz, NullHandler handler )
     {
-        cache.setNullHandler( clazz, handler );
+        getCache().setNullHandler( clazz, handler );
     }
 
     public static Object getProperty( OgnlContext context, Object source, Object name )
@@ -1760,7 +1777,7 @@ public class OgnlRuntime
      */
     public static void setClassCacheInspector( ClassCacheInspector inspector )
     {
-        cache.setClassCacheInspector( inspector );
+        getCache().setClassCacheInspector( inspector );
     }
 
     public static Method getMethod( OgnlContext context, Class<?> target, String name, Node[] children,
@@ -2207,6 +2224,11 @@ public class OgnlRuntime
     @Deprecated
     static OgnlCache getCache()
     {
+        if (cache==null)
+        {
+            log.log(Level.WARNING,"Deprecated: A static OgnlCache is being created, there may be side effects of multiple classloaders such as memory leaks and configuration conflicts. See https://issues.apache.org/jira/i#browse/OGNL-145", new Throwable());
+            cache=new OgnlCache();
+        }
         return cache;
     }
 }

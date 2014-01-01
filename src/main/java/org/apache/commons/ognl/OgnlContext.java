@@ -758,4 +758,18 @@ public class OgnlContext
     {
         return values.hashCode();
     }
+
+    protected OgnlCache cache;
+
+    public OgnlCache getCache()
+    {
+        if (cache==null) cache=OgnlRuntime.getCache();
+        return cache;
+    }
+
+    public void setCache(OgnlCache ognlCache)
+    {
+        this.cache = ognlCache;
+    }
+    
 }

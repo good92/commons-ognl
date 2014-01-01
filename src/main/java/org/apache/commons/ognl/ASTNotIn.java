@@ -48,7 +48,7 @@ class ASTNotIn
     {
         Object v1 = children[0].getValue( context, source );
         Object v2 = children[1].getValue( context, source );
-        return OgnlOps.in( v1, v2 ) ? Boolean.FALSE : Boolean.TRUE;
+        return OgnlOps.in( v1, v2, OgnlRuntime.getCache() ) ? Boolean.FALSE : Boolean.TRUE;
     }
 
     public Class getGetterClass()
