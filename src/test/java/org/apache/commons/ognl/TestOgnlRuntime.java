@@ -233,9 +233,9 @@ public class TestOgnlRuntime
     public void test_Class_Cache_Inspector()
         throws Exception
     {
-        OgnlRuntime.cache.clear();
+        OgnlRuntime.getCache().clear();
 
-        assertEquals( 0, OgnlRuntime.cache.propertyDescriptorCache.getSize() );
+        assertEquals( 0, OgnlRuntime.getCache().propertyDescriptorCache.getSize() );
 
         Root root = new Root();
         OgnlContext context = (OgnlContext) Ognl.createDefaultContext( null );
@@ -243,11 +243,11 @@ public class TestOgnlRuntime
 
         assertTrue( (Boolean) expr.getAccessor().get( context, root ) );
 
-        int size = OgnlRuntime.cache.propertyDescriptorCache.getSize();
+        int size = OgnlRuntime.getCache().propertyDescriptorCache.getSize();
         assertTrue( size > 0 );
 
         OgnlRuntime.clearCache();
-        assertEquals( 0, OgnlRuntime.cache.propertyDescriptorCache.getSize() );
+        assertEquals( 0, OgnlRuntime.getCache().propertyDescriptorCache.getSize() );
 
         // now register class cache prevention
 
@@ -256,7 +256,7 @@ public class TestOgnlRuntime
         expr = Ognl.compileExpression( context, root, "property.bean3.value != null" );
         assertTrue( (Boolean) expr.getAccessor().get( context, root ) );
 
-        assertEquals( ( size - 1 ), OgnlRuntime.cache.propertyDescriptorCache.getSize() );
+        assertEquals( ( size - 1 ), OgnlRuntime.getCache().propertyDescriptorCache.getSize() );
     }
 
     class TestCacheInspector

@@ -126,7 +126,7 @@ public class OgnlRuntime
      */
     private static final String NULL_OBJECT_STRING = "<null>";
 
-    static OgnlCache cache = new OgnlCache();
+    private static OgnlCache cache = new OgnlCache();
 
     private static final PrimitiveTypes primitiveTypes = new PrimitiveTypes();
 
@@ -2181,5 +2181,15 @@ public class OgnlRuntime
         }
 
         return source;
+    }
+
+    /**
+     * In case there are methods which try to access the static cache field, they can use this.
+     * @return
+     */
+    @Deprecated
+    static OgnlCache getCache()
+    {
+        return cache;
     }
 }
