@@ -19,8 +19,11 @@ package org.apache.commons.ognl;
  * under the License.
  */
 
+import java.util.logging.Logger;
+
 import org.apache.commons.ognl.enhance.ExpressionCompiler;
 import org.apache.commons.ognl.enhance.OrderedReturn;
+import org.apache.commons.ognl.internal.LoggingSupport;
 
 /**
  * $Id$
@@ -29,6 +32,8 @@ public class ASTSequence
     extends SimpleNode
     implements NodeType, OrderedReturn
 {
+    private static final Logger log=Logger.getLogger(ASTSequence.class.getName());
+
     private Class getterClass;
 
     private String lastExpression;
@@ -106,7 +111,8 @@ public class ASTSequence
 
         for ( int i = 0; i < children.length; ++i )
         {
-            // System.out.println("astsequence child : " + _children[i].getClass().getName());
+        	if (log.isLoggable(LoggingSupport.COMMENTEDOUT)) log.log(LoggingSupport.COMMENTEDOUT,"astsequence child : {0}", new Object[]{children[i].getClass().getName()});
+
             String seqValue = children[i].toGetSourceString( context, target );
 
             if ( ( i + 1 ) < children.length && ASTOr.class.isInstance( children[i] ) )

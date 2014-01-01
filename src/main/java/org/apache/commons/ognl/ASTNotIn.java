@@ -19,6 +19,9 @@ package org.apache.commons.ognl;
  * under the License.
  */
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.apache.commons.ognl.enhance.UnsupportedCompilationException;
 
 /**
@@ -28,7 +31,9 @@ class ASTNotIn
     extends SimpleNode
     implements NodeType
 {
-    public ASTNotIn( int id )
+    private static final Logger log=Logger.getLogger(ASTNotIn.class.getName());
+
+	public ASTNotIn( int id )
     {
         super( id );
     }
@@ -75,8 +80,7 @@ class ASTNotIn
         catch ( NullPointerException e )
         {
 
-            // expected to happen in some instances
-            e.printStackTrace();
+            log.log(Level.INFO,"expected to happen in some instances", e);
 
             throw new UnsupportedCompilationException( "evaluation resulted in null expression." );
         }

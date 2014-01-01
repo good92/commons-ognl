@@ -20,6 +20,9 @@ package org.apache.commons.ognl;
  */
 
 import java.util.*;
+import java.util.logging.Logger;
+
+import org.apache.commons.ognl.internal.LoggingSupport;
 
 /**
  * Implementation of PropertyAccessor that uses numbers and dynamic subscripts as properties to index into Lists.
@@ -28,6 +31,7 @@ public class ListPropertyAccessor
     extends ObjectPropertyAccessor
     implements PropertyAccessor
 {
+    private static final Logger log=Logger.getLogger(ListPropertyAccessor.class.getName());
 
     @Override
     public Object getProperty( Map<String, Object> context, Object target, Object name )
@@ -217,11 +221,8 @@ public class ListPropertyAccessor
 
         // TODO: This feels really inefficient, must be some better way
         // check if the index string represents a method on a custom class implementing java.util.List instead..
-        /*
-         * System.out.println("Listpropertyaccessor setter using index: " + index + " and current object: " +
-         * context.getCurrentObject() + " number is current object? " +
-         * Number.class.isInstance(context.getCurrentObject()));
-         */
+
+        if (log.isLoggable(LoggingSupport.COMMENTEDOUT)) log.log(LoggingSupport.COMMENTEDOUT,"Listpropertyaccessor setter using index: {0} and current object: {1} number is current object? {2}", new Object[]{index,context.getCurrentObject(),Number.class.isInstance(context.getCurrentObject())});
 
         return getSourceBeanMethod( context, target, index, indexStr, true );
     }

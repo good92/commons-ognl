@@ -22,11 +22,13 @@ package org.apache.commons.ognl;
 import org.apache.commons.ognl.enhance.ExpressionCompiler;
 import org.apache.commons.ognl.enhance.OgnlExpressionCompiler;
 import org.apache.commons.ognl.enhance.UnsupportedCompilationException;
+import org.apache.commons.ognl.internal.LoggingSupport;
 
 import java.beans.IntrospectionException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * Implementation of PropertyAccessor that uses reflection on the target object's class to find a field or a pair of
@@ -35,6 +37,7 @@ import java.util.Map;
 public class ObjectPropertyAccessor
     implements PropertyAccessor
 {
+    private static final Logger log=Logger.getLogger(ObjectPropertyAccessor.class.getName());
 
     /**
      * Returns OgnlRuntime.NotFound if the property does not exist.
@@ -231,8 +234,9 @@ public class ObjectPropertyAccessor
                     OgnlRuntime.getReadMethod( target.getClass(),
                                                context.getCurrentObject().toString().replaceAll( "\"", "" ) );
             }
-            // System.out.println("tried to get read method from target: " + target.getClass() + " with methodName:" +
-            // methodName + " result: " + m);
+            
+            if (log.isLoggable(LoggingSupport.COMMENTEDOUT)) log.log(LoggingSupport.COMMENTEDOUT,"tried to get read method from target: {0} with methodName:{1} result: {2}", new Object[]{target.getClass(),methodName,m });
+
             // try to get field if no method could be found
 
             if ( m == null )

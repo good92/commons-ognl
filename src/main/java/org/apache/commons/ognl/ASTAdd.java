@@ -20,9 +20,11 @@ package org.apache.commons.ognl;
  */
 
 import org.apache.commons.ognl.enhance.ExpressionCompiler;
+import org.apache.commons.ognl.internal.LoggingSupport;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.logging.Logger;
 
 import static java.lang.String.format;
 
@@ -65,6 +67,8 @@ class ASTAdd
         return "+";
     }
 
+    private static final Logger log=Logger.getLogger(ASTAdd.class.getName());
+
     boolean isWider( NodeType type, NodeType lastType )
     {
         if ( lastType == null )
@@ -72,7 +76,7 @@ class ASTAdd
             return true;
         }
 
-        // System.out.println("checking isWider(" + type.getGetterClass() + " , " + lastType.getGetterClass() + ")");
+        if (log.isLoggable(LoggingSupport.COMMENTEDOUT)) log.log(LoggingSupport.COMMENTEDOUT,"checking isWider({0} , {1})", new Object[]{type.getGetterClass(),lastType.getGetterClass()});
 
         if ( String.class.isAssignableFrom( lastType.getGetterClass() ) )
         {
@@ -195,8 +199,7 @@ class ASTAdd
                         expr = "null";
                     }
 
-                    // System.out.println("astadd child class: " + _children[i].getClass().getName() +
-                    // " and return expr: " + expr);
+                    if (log.isLoggable(LoggingSupport.COMMENTEDOUT)) log.log(LoggingSupport.COMMENTEDOUT,"astadd child class: {0} and return expr: {1}", new Object[]{children[i].getClass().getName(), expr});
 
                     if ( ASTProperty.class.isInstance( children[i] ) )
                     {
@@ -209,8 +212,7 @@ class ASTAdd
                         String rootExpr =
                             ExpressionCompiler.getRootExpression( children[i], context.getRoot(), context );
 
-                        // System.out.println("astadd chains is >>" + chain + "<< and rootExpr is >>" + rootExpr +
-                        // "<<");
+                        log.log(LoggingSupport.COMMENTEDOUT,"astadd chains is >>{0}<< and rootExpr is >>{1}<<", new Object[]{chain , rootExpr });
 
                         // dirty fix for overly aggressive casting dot operations
                         if ( rootExpr.endsWith( "." ) && chain != null && chain.startsWith( ")." ) )
@@ -273,11 +275,11 @@ class ASTAdd
                         {
                             if ( lastType != null && String.class.isAssignableFrom( lastType.getGetterClass() ) )
                             {
-                                // System.out.println("Input expr >>" + expr + "<<");
+                                log.log(LoggingSupport.COMMENTEDOUT,"Input expr >>{0}<<", new Object[]{expr });
                                 expr = expr.replaceAll( "&quot;", "\"" );
                                 expr = expr.replaceAll( "\"", "'" );
                                 expr = format( "\"%s\"", expr );
-                                // System.out.println("Expr now >>" + expr + "<<");
+                                log.log(LoggingSupport.COMMENTEDOUT,"Expr now >>{0}<<", new Object[]{expr });
                             }
                         }
                     }

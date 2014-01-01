@@ -22,8 +22,10 @@ package org.apache.commons.ognl;
 import org.apache.commons.ognl.enhance.ExpressionCompiler;
 import org.apache.commons.ognl.enhance.OrderedReturn;
 import org.apache.commons.ognl.enhance.UnsupportedCompilationException;
+import org.apache.commons.ognl.internal.LoggingSupport;
 
 import java.lang.reflect.Array;
+import java.util.logging.Logger;
 
 /**
  * $Id$
@@ -32,6 +34,8 @@ public class ASTChain
     extends SimpleNode
     implements NodeType, OrderedReturn
 {
+
+    private static final Logger log=Logger.getLogger(ASTChain.class.getName());
 
     private Class getterClass;
 
@@ -291,15 +295,11 @@ public class ASTChain
             {
                 for ( Node child : children )
                 {
-                    /*
-                     * System.out.println("astchain child: " + _children[i].getClass().getName() +
-                     * " with current object target " + context.getCurrentObject() + " current type: " +
-                     * context.getCurrentType());
-                     */
+                	if (log.isLoggable(LoggingSupport.COMMENTEDOUT)) log.log(LoggingSupport.COMMENTEDOUT,"astchain child: {0} with current object target {1} current type: {2}", new Object[]{child.getClass().getName(),context.getCurrentObject(),context.getCurrentType() });
 
                     String value = child.toGetSourceString( context, context.getCurrentObject() );
 
-                    // System.out.println("astchain child returned >>  " + value + "  <<");
+                    log.log(LoggingSupport.COMMENTEDOUT,"astchain child returned >>  {0}  <<", new Object[]{value });
 
                     if ( ASTCtor.class.isInstance( child ) )
                     {
@@ -311,8 +311,8 @@ public class ASTChain
                         lastType = (NodeType) child;
                     }
 
-                    // System.out.println("Astchain i: " + i + " currentobj : " + context.getCurrentObject() +
-                    // " and root: " + context.getRoot());
+                    if (log.isLoggable(LoggingSupport.COMMENTEDOUT)) log.log(LoggingSupport.COMMENTEDOUT,"Astchain currentobj : {0} and root: {1}", new Object[]{context.getCurrentObject(),context.getRoot()});
+
                     if ( !ASTVarRef.class.isInstance( child ) && !constructor && !(
                         OrderedReturn.class.isInstance( child )
                             && ( (OrderedReturn) child ).getLastExpression() != null ) && ( parent == null
@@ -321,11 +321,7 @@ public class ASTChain
                         value = OgnlRuntime.getCompiler( context ).castExpression( context, child, value );
                     }
 
-                    /*
-                     * System.out.println("astchain value now : " + value + " with index " + i + " current type " +
-                     * context.getCurrentType() + " current accessor " + context.getCurrentAccessor() + " prev type " +
-                     * context.getPreviousType() + " prev accessor " + context.getPreviousAccessor());
-                     */
+                    if (log.isLoggable(LoggingSupport.COMMENTEDOUT)) log.log(LoggingSupport.COMMENTEDOUT,"astchain value now : {0} current type {1} current accessor {2} prev type {3} prev accessor {4}", new Object[]{value ,context.getCurrentType() ,context.getCurrentAccessor(),context.getPreviousType(),context.getPreviousAccessor()});
 
                     if ( OrderedReturn.class.isInstance( child )
                         && ( (OrderedReturn) child ).getLastExpression() != null )
@@ -416,7 +412,7 @@ public class ASTChain
 
                 for ( int i = 0; i < children.length; i++ )
                 {
-                    // System.out.println("astchain setsource child[" + i + "] : " + _children[i].getClass().getName());
+                	if (log.isLoggable(LoggingSupport.COMMENTEDOUT)) log.log(LoggingSupport.COMMENTEDOUT,"astchain setsource child[{0}] : {1}", new Object[]{i,children[i].getClass().getName()});
 
                     if ( i == ( children.length - 1 ) )
                     {
@@ -427,7 +423,7 @@ public class ASTChain
                     // if (value == null || value.trim().length() <= 0)
                     // return "";
 
-                    // System.out.println("astchain setter child returned >>  " + value + "  <<");
+                    log.log(LoggingSupport.COMMENTEDOUT,"astchain setter child returned >>  {0}  <<", new Object[]{value });
 
                     if ( ASTCtor.class.isInstance( children[i] ) )
                     {
@@ -449,7 +445,7 @@ public class ASTChain
                         value = OgnlRuntime.getCompiler( context ).castExpression( context, children[i], value );
                     }
 
-                    // System.out.println("astchain setter after cast value is: " + value);
+                    log.log(LoggingSupport.COMMENTEDOUT,"astchain setter after cast value is: {0}", new Object[]{value});
 
                     /*
                      * if (!constructor && !OrderedReturn.class.isInstance(_children[i]) && (_parent == null ||

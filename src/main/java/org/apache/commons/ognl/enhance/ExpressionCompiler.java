@@ -46,6 +46,7 @@ import org.apache.commons.ognl.ExpressionNode;
 import org.apache.commons.ognl.Node;
 import org.apache.commons.ognl.OgnlContext;
 import org.apache.commons.ognl.OgnlRuntime;
+import org.apache.commons.ognl.internal.LoggingSupport;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -55,6 +56,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import static java.lang.String.format;
 
@@ -65,6 +67,7 @@ import static java.lang.String.format;
 public class ExpressionCompiler
     implements OgnlExpressionCompiler
 {
+    private static final Logger log=Logger.getLogger(ExpressionCompiler.class.getName());
 
     /**
      * Key used to store any java source string casting statements in the {@link OgnlContext} during class compilation.
@@ -228,12 +231,7 @@ public class ExpressionCompiler
             return body;
         }
 
-        /*
-         * System.out.println("castExpression() with expression " + expression + " expr class: " + expression.getClass()
-         * + " currentType is: " + context.getCurrentType() + " previousType: " + context.getPreviousType() +
-         * "\n current Accessor: " + context.getCurrentAccessor() + " previous Accessor: " +
-         * context.getPreviousAccessor() + " current object " + context.getCurrentObject());
-         */
+        if (log.isLoggable(LoggingSupport.COMMENTEDOUT)) log.log(LoggingSupport.COMMENTEDOUT,"castExpression() with expression {0} expr class: {1} currentType is: {2} previousType: {3} current Accessor: {4} previous Accessor: {5} current object {6}", new Object[]{expression,expression.getClass(),context.getCurrentType(),context.getPreviousType(),context.getCurrentAccessor(),context.getPreviousAccessor(),context.getCurrentObject() });
 
         ExpressionCompiler.addCastString( context,
                                           "((" + ExpressionCompiler.getCastString( context.getCurrentAccessor() )
@@ -480,7 +478,8 @@ public class ExpressionCompiler
     public void compileExpression( OgnlContext context, Node expression, Object root )
         throws Exception
     {
-        // System.out.println("Compiling expr class " + expression.getClass().getName() + " and root " + root);
+
+    	if (log.isLoggable(LoggingSupport.COMMENTEDOUT)) log.log(LoggingSupport.COMMENTEDOUT,"Compiling expr class {0} and root {1}", new Object[]{expression.getClass().getName(),root});
 
         if ( expression.getAccessor() != null )
         {
@@ -639,7 +638,8 @@ public class ExpressionCompiler
 
         body = body.replaceAll( "\\.\\.", "." );
 
-        // System.out.println("Getter Body: ===================================\n" + body);
+
+        log.log(LoggingSupport.COMMENTEDOUT,"Getter Body: {0}", new Object[]{body});
         valueGetter.setBody( body );
         newClass.addMethod( valueGetter );
 
@@ -681,8 +681,8 @@ public class ExpressionCompiler
 
             String body = format( "{ return %s %s; }", widener, ref.getExpression() ).replaceAll( "\\.\\.", "." );
 
-            // System.out.println("adding method " + ref.getName() + " with body:\n" + body + " and return type: " +
-            // ref.getType());
+
+            if (log.isLoggable(LoggingSupport.COMMENTEDOUT)) log.log(LoggingSupport.COMMENTEDOUT,"adding method {0} with body: {1} and return type: {2}", new Object[]{ref.getName(),body,ref.getType()});
 
             CtMethod method =
                 new CtMethod( classPool.get( getCastString( ref.getType() ) ), ref.getName(), params, clazz );
@@ -734,7 +734,8 @@ public class ExpressionCompiler
 
         body = body.replaceAll( "\\.\\.", "." );
 
-        // System.out.println("Setter Body: ===================================\n" + body);
+
+        log.log(LoggingSupport.COMMENTEDOUT,"Setter Body: {0}", new Object[]{body});
 
         valueSetter.setBody( body );
         newClass.addMethod( valueSetter );

@@ -20,6 +20,8 @@ package org.apache.commons.ognl;
  */
 
 import java.lang.reflect.Method;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Superclass for OGNL exceptions, incorporating an optional encapsulated exception.
@@ -27,6 +29,7 @@ import java.lang.reflect.Method;
 public class OgnlException
     extends Exception
 {
+    private static final Logger log=Logger.getLogger(OgnlException.class.getName());
     // cache initCause method - if available..to be used during throwable constructor
     // to properly setup superclass.
 
@@ -149,7 +152,7 @@ public class OgnlException
     @Override
     public void printStackTrace()
     {
-        printStackTrace( System.err );
+        log.log(Level.WARNING,"", this);
     }
 
     /**
@@ -161,12 +164,6 @@ public class OgnlException
         synchronized ( s )
         {
             super.printStackTrace( s );
-            if ( reason != null )
-            {
-                s.println( "/-- Encapsulated exception ------------\\" );
-                reason.printStackTrace( s );
-                s.println( "\\--------------------------------------/" );
-            }
         }
     }
 
@@ -179,12 +176,6 @@ public class OgnlException
         synchronized ( s )
         {
             super.printStackTrace( s );
-            if ( reason != null )
-            {
-                s.println( "/-- Encapsulated exception ------------\\" );
-                reason.printStackTrace( s );
-                s.println( "\\--------------------------------------/" );
-            }
         }
     }
 }

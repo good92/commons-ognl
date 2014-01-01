@@ -19,7 +19,10 @@ package org.apache.commons.ognl;
  * under the License.
  */
 
+import java.util.logging.Logger;
+
 import org.apache.commons.ognl.enhance.UnsupportedCompilationException;
+import org.apache.commons.ognl.internal.LoggingSupport;
 
 /**
  * Base class for types that compare values.
@@ -27,6 +30,7 @@ import org.apache.commons.ognl.enhance.UnsupportedCompilationException;
 public abstract class ComparisonExpression
     extends BooleanExpression
 {
+    private static final Logger log=Logger.getLogger(ComparisonExpression.class.getName());
 
     private static final long serialVersionUID = -5945855000509930682L;
 
@@ -76,8 +80,7 @@ public abstract class ComparisonExpression
             OgnlRuntime.getChildSource( context, target, children[0] );
             OgnlRuntime.getChildSource( context, target, children[1] );
 
-            // System.out.println("comparison expression currentType: " + context.getCurrentType() + " previousType: " +
-            // context.getPreviousType());
+            if (log.isLoggable(LoggingSupport.COMMENTEDOUT)) log.log(LoggingSupport.COMMENTEDOUT,"comparison expression currentType: {0} previousType: {1}", new Object[]{context.getCurrentType(),context.getPreviousType()});
 
             boolean conversion = OgnlRuntime.shouldConvertNumericTypes( context );
 

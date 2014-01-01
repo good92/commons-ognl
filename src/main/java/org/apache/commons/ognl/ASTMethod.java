@@ -23,8 +23,10 @@ import org.apache.commons.ognl.enhance.ExpressionCompiler;
 import org.apache.commons.ognl.enhance.OgnlExpressionCompiler;
 import org.apache.commons.ognl.enhance.OrderedReturn;
 import org.apache.commons.ognl.enhance.UnsupportedCompilationException;
+import org.apache.commons.ognl.internal.LoggingSupport;
 
 import java.lang.reflect.Method;
+import java.util.logging.Logger;
 
 /**
  * $Id$
@@ -33,6 +35,7 @@ public class ASTMethod
     extends SimpleNode
     implements OrderedReturn, NodeType
 {
+    private static final Logger log=Logger.getLogger(ASTMethod.class.getName());
 
     private String methodName;
 
@@ -117,10 +120,8 @@ public class ASTMethod
 
     public String toGetSourceString( OgnlContext context, Object target )
     {
-        /*
-         * System.out.println("methodName is " + methodName + " for target " + target + " target class: " + (target !=
-         * null ? target.getClass() : null) + " current type: " + context.getCurrentType());
-         */
+    	if (log.isLoggable(LoggingSupport.COMMENTEDOUT)) log.log(LoggingSupport.COMMENTEDOUT,"methodName is {0} for target {1} target class: {2} current type: {3}", new Object[]{methodName ,target, (target !=null ? target.getClass() : null),context.getCurrentType()});
+
         if ( target == null )
         {
             throw new UnsupportedCompilationException( "Target object is null." );
@@ -189,12 +190,9 @@ public class ASTMethod
             {
                 Class[] parms = method.getParameterTypes();
                 String prevCast = (String) context.remove( ExpressionCompiler.PRE_CAST );
-                /*
-                 * System.out.println("before children methodName is " + methodName + " for target " + target +
-                 * " target class: " + (target != null ? target.getClass() : null) + " current type: " +
-                 * context.getCurrentType() + " and previous type: " + context.getPreviousType());
-                 */
 
+                if (log.isLoggable(LoggingSupport.COMMENTEDOUT)) log.log(LoggingSupport.COMMENTEDOUT,"before children methodName is {0} for target {1} target class: {2} current type: {3} and previous type: {4}", new Object[]{methodName, target,(target != null ? target.getClass() : null), context.getCurrentType(), context.getPreviousType() });
+                
                 for ( int i = 0; i < children.length; i++ )
                 {
                     if ( i > 0 )
@@ -263,10 +261,8 @@ public class ASTMethod
 
     public String toSetSourceString( OgnlContext context, Object target )
     {
-        /*
-         * System.out.println("current type: " + context.getCurrentType() + " target:" + target + " " +
-         * context.getCurrentObject() + " last child? " + lastChild(context));
-         */
+    	if (log.isLoggable(LoggingSupport.COMMENTEDOUT)) log.log(LoggingSupport.COMMENTEDOUT,"current type: {0} target:{1} {2} last child? {3}", new Object[]{context.getCurrentType(),target,context.getCurrentObject(),lastChild(context) });
+    	
         Method method =
             OgnlRuntime.getWriteMethod( context.getCurrentType() != null ? context.getCurrentType() : target.getClass(),
                                         methodName, children != null ? children.length : -1 );

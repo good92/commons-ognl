@@ -19,6 +19,9 @@ package org.apache.commons.ognl;
  * under the License.
  */
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.apache.commons.ognl.enhance.UnsupportedCompilationException;
 
 /**
@@ -28,6 +31,7 @@ public abstract class BooleanExpression
     extends ExpressionNode
     implements NodeType
 {
+    private static final Logger log=Logger.getLogger(BooleanExpression.class.getName());
 
     private static final long serialVersionUID = 8630306635724834872L;
 
@@ -99,8 +103,7 @@ public abstract class BooleanExpression
         catch ( NullPointerException e )
         {
 
-            // expected to happen in some instances
-            e.printStackTrace();
+            log.log(Level.INFO,"expected to happen in some instances", e);
 
             throw new UnsupportedCompilationException( "evaluation resulted in null expression." );
         }

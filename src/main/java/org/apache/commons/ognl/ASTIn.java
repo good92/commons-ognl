@@ -19,6 +19,9 @@ package org.apache.commons.ognl;
  * under the License.
  */
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.apache.commons.ognl.enhance.UnsupportedCompilationException;
 
 /**
@@ -28,7 +31,10 @@ class ASTIn
     extends SimpleNode
     implements NodeType
 {
-    public ASTIn( int id )
+
+    private static final Logger log=Logger.getLogger(ASTIn.class.getName());
+	
+	public ASTIn( int id )
     {
         super( id );
     }
@@ -76,9 +82,8 @@ class ASTIn
         catch ( NullPointerException e )
         {
 
-            // expected to happen in some instances
-            e.printStackTrace();
-
+            log.log(Level.INFO,"expected to happen in some instances", e);
+            
             throw new UnsupportedCompilationException( "evaluation resulted in null expression." );
         }
         catch ( Throwable t )

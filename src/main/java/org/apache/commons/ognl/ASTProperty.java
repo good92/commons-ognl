@@ -21,11 +21,13 @@ package org.apache.commons.ognl;
 
 import org.apache.commons.ognl.enhance.ExpressionCompiler;
 import org.apache.commons.ognl.enhance.UnsupportedCompilationException;
+import org.apache.commons.ognl.internal.LoggingSupport;
 
 import java.beans.IndexedPropertyDescriptor;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 import java.util.Iterator;
+import java.util.logging.Logger;
 
 /**
  * $Id$
@@ -34,6 +36,8 @@ public class ASTProperty
     extends SimpleNode
     implements NodeType
 {
+    private static final Logger log=Logger.getLogger(ASTProperty.class.getName());
+
     private boolean indexedAccess = false;
 
     private Class getterClass;
@@ -155,13 +159,10 @@ public class ASTProperty
 
         try
         {
-            /*
-             * System.out.println("astproperty is indexed? : " + isIndexedAccess() + " child: " +
-             * _children[0].getClass().getName() + " target: " + target.getClass().getName() + " current object: " +
-             * context.getCurrentObject().getClass().getName());
-             */
-
             Node child = children[0];
+
+            if (log.isLoggable(LoggingSupport.COMMENTEDOUT)) log.log(LoggingSupport.COMMENTEDOUT,"astproperty is indexed? : {0} child: {1} target: {2} current object: {3}", new Object[]{isIndexedAccess(),child.getClass().getName(),target.getClass().getName(),context.getCurrentObject().getClass().getName() });
+
             if ( isIndexedAccess() )
             {
                 Object value = child.getValue( context, context.getRoot() );
@@ -193,9 +194,7 @@ public class ASTProperty
                 {
                     PropertyAccessor propertyAccessor = OgnlRuntime.getPropertyAccessor( target.getClass() );
 
-                    // System.out.println("child value : " + _children[0].getValue(context, context.getCurrentObject())
-                    // + " using propaccessor " + p.getClass().getName()
-                    // + " and srcString " + srcString + " on target: " + target);
+                    if (log.isLoggable(LoggingSupport.COMMENTEDOUT)) log.log(LoggingSupport.COMMENTEDOUT,"child value : {0} using propaccessor {1} and srcString {2} on target: {3}", new Object[]{child.getValue(context, context.getCurrentObject()),propertyAccessor.getClass().getName(),srcString,target });
 
                     Object currentObject = context.getCurrentObject();
                     if ( ASTConst.class.isInstance( child ) && Number.class.isInstance( currentObject ) )
@@ -263,12 +262,7 @@ public class ASTProperty
             else
             {
 
-                /*
-                 * System.out.println("astproperty trying to get " + name + " on object target: " +
-                 * context.getCurrentObject().getClass().getName() + " current type " + context.getCurrentType() +
-                 * " current accessor " + context.getCurrentAccessor() + " prev type " + context.getPreviousType() +
-                 * " prev accessor " + context.getPreviousAccessor());
-                 */
+            	if (log.isLoggable(LoggingSupport.COMMENTEDOUT)) log.log(LoggingSupport.COMMENTEDOUT,"astproperty trying to get {0} on object target: {1} current type {2} current accessor {3} prev type {4} prev accessor {5}", new Object[]{name,context.getCurrentObject().getClass().getName(),context.getCurrentType(),context.getCurrentAccessor(),context.getPreviousType(),context.getPreviousAccessor() });
 
                 PropertyAccessor pa = OgnlRuntime.getPropertyAccessor( context.getCurrentObject().getClass() );
 
@@ -400,11 +394,8 @@ public class ASTProperty
         {
             throw new UnsupportedCompilationException( "Current target is null." );
         }
-        /*
-         * System.out.println("astproperty(setter) is indexed? : " + isIndexedAccess() + " child: " +
-         * _children[0].getClass().getName() + " target: " + target.getClass().getName() + " children length: " +
-         * _children.length);
-         */
+        
+        if (log.isLoggable(LoggingSupport.COMMENTEDOUT)) log.log(LoggingSupport.COMMENTEDOUT,"astproperty(setter) is indexed? : {0} child: {1} target: {2} children length: {3}", new Object[]{isIndexedAccess(),children[0].getClass().getName(),target.getClass().getName(),children.length});
 
         try
         {
@@ -422,8 +413,7 @@ public class ASTProperty
 
                 String srcString = getSourceString( context, child );
 
-                // System.out.println("astproperty setter using indexed value " + value + " and srcString: " +
-                // srcString);
+                log.log(LoggingSupport.COMMENTEDOUT,"astproperty setter using indexed value {0} and srcString: {1}", new Object[]{value,srcString});
 
                 if ( context.get( "_indexedMethod" ) != null )
                 {
@@ -477,10 +467,7 @@ public class ASTProperty
                         ? propertyAccessor.getSourceSetter( context, target, srcString )
                         : propertyAccessor.getSourceAccessor( context, target, srcString );
 
-                    /*
-                     * System.out.println("ASTProperty using propertyaccessor and isLastChild? " + lastChild(context) +
-                     * " generated source of: " + result + " using accessor class: " + p.getClass().getName());
-                     */
+                    if (log.isLoggable(LoggingSupport.COMMENTEDOUT)) log.log(LoggingSupport.COMMENTEDOUT,"ASTProperty using propertyaccessor and isLastChild? {0} generated source of: {1} using accessor class: {2}", new Object[]{lastChild(context),result,propertyAccessor.getClass().getName()});
 
                     // result = p.getSourceAccessor(context, target, srcString);
                     getterClass = context.getCurrentType();
@@ -500,8 +487,7 @@ public class ASTProperty
 
             String name = ( (ASTConst) child ).getValue().toString();
 
-            // System.out.println(" astprop(setter) : trying to set " + name + " on object target " +
-            // context.getCurrentObject().getClass().getName());
+            if (log.isLoggable(LoggingSupport.COMMENTEDOUT)) log.log(LoggingSupport.COMMENTEDOUT," astprop(setter) : trying to set {0} on object target {1}", new Object[]{name,context.getCurrentObject().getClass().getName()});
 
             target = getTarget( context, target, name );
 
@@ -567,10 +553,7 @@ public class ASTProperty
             {
                 PropertyAccessor pa = OgnlRuntime.getPropertyAccessor( context.getCurrentObject().getClass() );
 
-                /*
-                 * System.out.println("astproperty trying to set " + name + " on object target: " +
-                 * context.getCurrentObject().getClass().getName() + " using propertyaccessor type: " + pa);
-                 */
+                if (log.isLoggable(LoggingSupport.COMMENTEDOUT)) log.log(LoggingSupport.COMMENTEDOUT,"astproperty trying to set {0} on object target: {1} using propertyaccessor type: {2}", new Object[]{name,context.getCurrentObject().getClass().getName(),pa});
 
                 if ( target != null )
                 {
@@ -661,9 +644,9 @@ public class ASTProperty
         {
             srcString = "\"" + srcString + "\"";
         }
-        // System.out.println("indexed getting with child srcString: " + srcString + " value class: " +
-        // value.getClass() + " and child: " + _children[0].getClass());
+        
+        if (log.isLoggable(LoggingSupport.COMMENTEDOUT)) log.log(LoggingSupport.COMMENTEDOUT,"indexed getting with child srcString: {0} value class: {1} and child: {2}", new Object[]{srcString,new LoggingSupport.FormatGetValue(child,context),child.getClass()});
+
         return srcString;
     }
-
 }

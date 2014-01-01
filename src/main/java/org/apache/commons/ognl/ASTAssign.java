@@ -19,8 +19,11 @@ package org.apache.commons.ognl;
  * under the License.
  */
 
+import java.util.logging.Logger;
+
 import org.apache.commons.ognl.enhance.OrderedReturn;
 import org.apache.commons.ognl.enhance.UnsupportedCompilationException;
+import org.apache.commons.ognl.internal.LoggingSupport;
 
 /**
  * $Id$
@@ -45,6 +48,8 @@ class ASTAssign
         children[0].setValue( context, source, result );
         return result;
     }
+
+    private static final Logger log=Logger.getLogger(ASTAssign.class.getName());
 
     public String toGetSourceString( OgnlContext context, Object target )
     {
@@ -93,7 +98,7 @@ class ASTAssign
 
             result = first + second + ")";
 
-            // System.out.println("building ordered ret from child[0] with result of:" + result);
+            log.log(LoggingSupport.COMMENTEDOUT,"building ordered ret from child[0] with result of:{0}", new Object[]{result});
 
             result =
                 OgnlRuntime

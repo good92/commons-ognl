@@ -21,6 +21,10 @@ package org.apache.commons.ognl;
 
 import java.lang.reflect.Array;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.apache.commons.ognl.internal.LoggingSupport;
 
 import static java.lang.String.format;
 
@@ -172,14 +176,16 @@ public class ArrayPropertyAccessor
         return format( "[%s]=org.apache.commons.ognl.OgnlOps.convertValue($3,%s.class)", indexStr, type.getName() );
     }
 
+    private static final Logger log=Logger.getLogger(ArrayPropertyAccessor.class.getName());
+    
+    
     private static String getIndexString( OgnlContext context, Object index )
     {
         String indexStr = index.toString();
 
         // need to convert to primitive for list index access
 
-        // System.out.println("index class " + index.getClass() + " current type " + context.getCurrentType() +
-        // " current object class " + context.getCurrentObject().getClass());
+        if (log.isLoggable(LoggingSupport.COMMENTEDOUT)) log.log(LoggingSupport.COMMENTEDOUT,"index class {0} current type {1} current object class {2}", new Object[]{index.getClass(),context.getCurrentType(),context.getCurrentObject().getClass()});
 
         if ( context.getCurrentType() != null && !context.getCurrentType().isPrimitive()
             && Number.class.isAssignableFrom( context.getCurrentType() ) )
