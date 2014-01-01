@@ -21,6 +21,7 @@
 
 package org.apache.commons.ognl.internal;
 
+import org.apache.commons.ognl.OgnlCache;
 import org.apache.commons.ognl.internal.entry.PropertyDescriptorCacheEntryFactory;
 import org.apache.commons.ognl.test.objects.Bean2;
 import org.junit.Test;
@@ -38,13 +39,15 @@ import static junit.framework.Assert.assertTrue;
  */
 public class PropertyDescriptorCacheTest
 {
+    PropertyDescriptorCacheEntryFactory pdcef=new PropertyDescriptorCacheEntryFactory();
     ConcurrentHashMapCache<Class<?>, Map<String,PropertyDescriptor>> cache =
-        new ConcurrentHashMapCache<Class<?>, Map<String,PropertyDescriptor>>( new PropertyDescriptorCacheEntryFactory());
+        new ConcurrentHashMapCache<Class<?>, Map<String,PropertyDescriptor>>( pdcef );
 
     @Test
     public void testGet( )
         throws Exception
     {
+        pdcef.setOgnlCache(new OgnlCache());
         Map<String, PropertyDescriptor> d = getPropertyDescriptor( Bean2.class  );
         assertTrue( d.containsKey( "id" ) );
         assertTrue( d.containsKey( "bean3" ) );

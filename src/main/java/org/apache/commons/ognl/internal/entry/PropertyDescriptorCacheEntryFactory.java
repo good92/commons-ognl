@@ -98,11 +98,11 @@ public class PropertyDescriptorCacheEntryFactory
         return m;
     }
 
-    private static void findObjectIndexedPropertyDescriptors( Class<?> targetClass,
+    private void findObjectIndexedPropertyDescriptors( Class<?> targetClass,
                                                              Map<String, PropertyDescriptor> intoMap )
         throws OgnlException
     {
-        Map<String, List<Method>> allMethods = OgnlRuntime.getMethods( targetClass, false );
+        Map<String, List<Method>> allMethods = OgnlRuntime.getMethods( targetClass, false, getCache() );
         Map<String, List<Method>> pairs = new HashMap<String, List<Method>>( 101 );
 
         for ( Map.Entry<String, List<Method>> entry : allMethods.entrySet() )
@@ -123,7 +123,7 @@ public class PropertyDescriptorCacheEntryFactory
                     methodName.startsWith( OgnlRuntime.GET_PREFIX ) ) ) && ( methodName.length() > 3 ) )
                 {
                     String propertyName = Introspector.decapitalize( methodName.substring( 3 ) );
-                    Class<?>[] parameterTypes = OgnlRuntime.getParameterTypes( method );
+                    Class<?>[] parameterTypes = OgnlRuntime.getParameterTypes( method, cache );
                     int parameterCount = parameterTypes.length;
 
                     if ( isGet && ( parameterCount == 1 ) && ( method.getReturnType() != Void.TYPE ) )
@@ -182,14 +182,20 @@ public class PropertyDescriptorCacheEntryFactory
             }
         }
     }
-    private static boolean indexMethodCheck( List<Method> methods )
+    private OgnlCache getCache()
+    {
+        if (cache==null) cache=OgnlRuntime.getCache();
+        return cache;
+    }
+
+    private boolean indexMethodCheck( List<Method> methods )
     {
         boolean result = false;
 
         if ( methods.size() > 0 )
         {
             Method method = methods.get( 0 );
-            Class<?>[] parameterTypes = OgnlRuntime.getParameterTypes( method );
+            Class<?>[] parameterTypes = OgnlRuntime.getParameterTypes( method, cache );
             int numParameterTypes = parameterTypes.length;
             Class<?> lastMethodClass = method.getDeclaringClass();
 
@@ -205,7 +211,7 @@ public class PropertyDescriptorCacheEntryFactory
                 }
                 else
                 {
-                    Class<?>[] mpt = OgnlRuntime.getParameterTypes( method );
+                    Class<?>[] mpt = OgnlRuntime.getParameterTypes( method, cache );
                     int mpc = parameterTypes.length;
 
                     if ( numParameterTypes != mpc )

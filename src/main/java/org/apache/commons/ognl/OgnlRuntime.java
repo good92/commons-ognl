@@ -395,11 +395,22 @@ public class OgnlRuntime
 
     /**
      * Returns the parameter types of the given method.
+     * @deprecated Use {@link #getParameterTypes(Method,OgnlCache)} instead
      */
     public static Class<?>[] getParameterTypes( Method method )
         throws CacheException
     {
-        return getCache().getMethodParameterTypes( method );
+        return getParameterTypes(method, OgnlRuntime.getCache());
+    }
+
+    /**
+     * Returns the parameter types of the given method.
+     * @param cache TODO
+     */
+    public static Class<?>[] getParameterTypes( Method method, OgnlCache cache )
+        throws CacheException
+    {
+        return cache.getMethodParameterTypes( method );
     }
 
     /**
@@ -417,7 +428,7 @@ public class OgnlRuntime
         if ( type == null || type.getGenericSuperclass() == null || !ParameterizedType.class.isInstance(
             type.getGenericSuperclass() ) || method.getDeclaringClass().getTypeParameters() == null )
         {
-            return getParameterTypes( method );
+            return getParameterTypes( method, OgnlRuntime.getCache() );
         }
 
         GenericMethodParameterTypeCacheEntry key = new GenericMethodParameterTypeCacheEntry( method, type );
@@ -1185,19 +1196,31 @@ public class OgnlRuntime
      * @param targetClass
      * @param staticMethods if true (false) returns only the (non-)static methods
      * @return Returns the map of methods for a given class
+     * @deprecated Use {@link #getMethods(Class<?>,boolean,OgnlCache)} instead
      */
     public static Map<String, List<Method>> getMethods( Class<?> targetClass, boolean staticMethods )
+    {
+        return getMethods(targetClass, staticMethods, OgnlRuntime.getCache());
+    }
+
+    /**
+     * @param targetClass
+     * @param staticMethods if true (false) returns only the (non-)static methods
+     * @param cache TODO
+     * @return Returns the map of methods for a given class
+     */
+    public static Map<String, List<Method>> getMethods( Class<?> targetClass, boolean staticMethods, OgnlCache cache )
     {
         DeclaredMethodCacheEntry.MethodType type = staticMethods ?
             DeclaredMethodCacheEntry.MethodType.STATIC :
             DeclaredMethodCacheEntry.MethodType.NON_STATIC;
         DeclaredMethodCacheEntry key = new DeclaredMethodCacheEntry( targetClass, type );
-        return getCache().getMethod( key );
+        return cache.getMethod( key );
     }
 
     public static List<Method> getMethods( Class<?> targetClass, String name, boolean staticMethods )
     {
-        return getMethods( targetClass, staticMethods ).get( name );
+        return getMethods( targetClass, staticMethods, OgnlRuntime.getCache() ).get( name );
     }
 
     public static Map<String, Field> getFields( Class<?> targetClass )
