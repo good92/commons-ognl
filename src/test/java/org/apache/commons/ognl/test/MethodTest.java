@@ -38,9 +38,12 @@ public class MethodTest
 
     private static BaseGeneric<GameGenericObject, Long> GENERIC = new GameGeneric();
 
-    private static Object[][] TESTS = { { "hashCode()", new Integer( ROOT.hashCode() ) },
+    private static Object[][] TESTS = { 
+        { "hashCode()", new Integer( ROOT.hashCode() ) },
         { "getBooleanValue() ? \"here\" : \"\"", "" }, { "getValueIsTrue(!false) ? \"\" : \"here\" ", "" },
-        { "messages.format('ShowAllCount', one)", "foo" },
+        { "one", 1 },
+        { "messages.format('ShowAllCount', 'one')", "first" },
+        { "messages.format('ShowAllCount', new Object[] {'one'})", "foo" },
         { "getTestValue(@org.apache.commons.ognl.test.objects.SimpleEnum@ONE.value)", new Integer( 2 ) },
         { "@org.apache.commons.ognl.test.MethodTest@getA().isProperty()", Boolean.FALSE },
         { "isDisabled()", Boolean.TRUE }, { "isEditorDisabled()", Boolean.FALSE },
