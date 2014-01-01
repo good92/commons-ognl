@@ -21,6 +21,7 @@
 
 package org.apache.commons.ognl.internal;
 
+import org.apache.commons.ognl.OgnlCache;
 import org.apache.commons.ognl.internal.entry.CacheEntryFactory;
 import org.apache.commons.ognl.test.objects.Root;
 import org.junit.Test;
@@ -42,6 +43,13 @@ public class ConstructorCacheTest
         {
             count++;
             return Arrays.<Constructor<?>>asList( key.getConstructors( ) );
+        }
+        private OgnlCache cache;
+
+        @Override
+        public void setOgnlCache(OgnlCache cache)
+        {
+            this.cache=cache;
         }
     });
 

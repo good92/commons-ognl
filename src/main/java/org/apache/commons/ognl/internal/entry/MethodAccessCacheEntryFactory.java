@@ -23,6 +23,7 @@ package org.apache.commons.ognl.internal.entry;
  * $Id$
  */
 
+import org.apache.commons.ognl.OgnlCache;
 import org.apache.commons.ognl.internal.CacheException;
 
 import java.lang.reflect.Method;
@@ -59,5 +60,12 @@ public class MethodAccessCacheEntryFactory
         {
             return PUBLIC_METHOD;
         }
+    }
+    private OgnlCache cache;
+
+    @Override
+    public void setOgnlCache(OgnlCache cache)
+    {
+        this.cache=cache;
     }
 }

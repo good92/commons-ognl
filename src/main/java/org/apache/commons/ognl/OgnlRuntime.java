@@ -466,12 +466,26 @@ public class OgnlRuntime
      * @param method
      * @return
      * @throws org.apache.commons.ognl.internal.CacheException
+     * @deprecated Use {@link #getPermission(Method,OgnlCache)} instead
      */
     public static Permission getPermission( Method method )
         throws CacheException
     {
+        return getPermission(method, OgnlRuntime.getCache());
+    }
+
+    /**
+     * Permission will be named "invoke.<declaring-class>.<method-name>".
+     * @param method
+     * @param cache TODO
+     * @return
+     * @throws org.apache.commons.ognl.internal.CacheException
+     */
+    public static Permission getPermission( Method method, OgnlCache cache )
+        throws CacheException
+    {
         PermissionCacheEntry key = new PermissionCacheEntry( method );
-        return getCache().getInvokePermission( key );
+        return cache.getInvokePermission( key );
     }
 
     public static Object invokeMethod( Object target, Method method, Object[] argsArray )
@@ -2222,7 +2236,7 @@ public class OgnlRuntime
      * @return
      */
     @Deprecated
-    static OgnlCache getCache()
+    public static OgnlCache getCache()
     {
         if (cache==null)
         {

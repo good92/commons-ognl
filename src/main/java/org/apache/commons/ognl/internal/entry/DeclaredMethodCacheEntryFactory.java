@@ -26,6 +26,8 @@ package org.apache.commons.ognl.internal.entry;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
+import org.apache.commons.ognl.OgnlCache;
+
 /**
  * User: mcucchiara
  * Date: 13/10/11
@@ -54,5 +56,13 @@ public class DeclaredMethodCacheEntryFactory
             }
         }
 
+    }
+
+    private OgnlCache cache;
+
+    @Override
+    public void setOgnlCache(OgnlCache cache)
+    {
+        this.cache=cache;
     }
 }

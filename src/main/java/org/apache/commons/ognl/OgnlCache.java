@@ -119,6 +119,13 @@ public class OgnlCache {
             {
                 return Arrays.<Constructor<?>>asList( key.getConstructors() );
             }
+            private OgnlCache cache;
+
+            @Override
+            public void setOgnlCache(OgnlCache cache)
+            {
+                this.cache=cache;
+            }
         } );
 
     private final Cache<DeclaredMethodCacheEntry, Map<String, List<Method>>> _methodCache =
@@ -138,6 +145,13 @@ public class OgnlCache {
             {
                 return key.getParameterTypes( );
             }
+            private OgnlCache cache;
+
+            @Override
+            public void setOgnlCache(OgnlCache cache)
+            {
+                this.cache=cache;
+            }
         } );
 
     private final Cache<GenericMethodParameterTypeCacheEntry, Class<?>[]> _genericMethodParameterTypesCache =
@@ -149,6 +163,13 @@ public class OgnlCache {
             public Class<?>[] create( Constructor<?> key ) throws CacheException
             {
                 return key.getParameterTypes( );
+            }
+            private OgnlCache cache;
+
+            @Override
+            public void setOgnlCache(OgnlCache cache)
+            {
+                this.cache=cache;
             }
         } );
 

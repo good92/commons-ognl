@@ -23,10 +23,13 @@ package org.apache.commons.ognl.internal.entry;
  * $Id$
  */
 
+import org.apache.commons.ognl.OgnlCache;
 import org.apache.commons.ognl.internal.CacheException;
 
 public interface CacheEntryFactory<K, V>
 {
     V create( K key )
         throws CacheException;
+    
+    void setOgnlCache(OgnlCache cache);
 }

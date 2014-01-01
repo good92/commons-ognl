@@ -21,6 +21,7 @@
 
 package org.apache.commons.ognl.internal;
 
+import org.apache.commons.ognl.OgnlCache;
 import org.apache.commons.ognl.internal.entry.MethodPermCacheEntryFactory;
 import org.apache.commons.ognl.test.objects.Root;
 import org.junit.Assert;
@@ -38,12 +39,15 @@ public class MethodPermCacheTest
 {
     private SecurityManager securityManager =new DummySecurityManager();
 
+    MethodPermCacheEntryFactory mpcef=new MethodPermCacheEntryFactory( securityManager );
+    
     Cache<Method, Boolean> cache =
-        new ConcurrentHashMapCache<Method, Boolean>( new MethodPermCacheEntryFactory( securityManager ) );
+        new ConcurrentHashMapCache<Method, Boolean>( mpcef );
     @Test
     public void testGetPublicMethod( )
         throws CacheException, NoSuchMethodException
-    {
+    {        
+        mpcef.setOgnlCache(new OgnlCache());
         Method method = Root.class.getMethod( "getArray");
         Assert.assertTrue( cache.get( method ) );
     }

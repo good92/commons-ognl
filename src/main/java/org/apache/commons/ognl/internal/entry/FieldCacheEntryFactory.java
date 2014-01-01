@@ -23,6 +23,7 @@ package org.apache.commons.ognl.internal.entry;
  * $Id: FiedlCacheEntryFactory.java 1194954 2011-10-29 18:00:27Z mcucchiara $
  */
 
+import org.apache.commons.ognl.OgnlCache;
 import org.apache.commons.ognl.internal.CacheException;
 
 import java.lang.reflect.Field;
@@ -42,6 +43,13 @@ public class FieldCacheEntryFactory
             result.put( field.getName(), field );
         }
         return result;
+    }
+    private OgnlCache cache;
+
+    @Override
+    public void setOgnlCache(OgnlCache cache)
+    {
+        this.cache=cache;
     }
 }
 

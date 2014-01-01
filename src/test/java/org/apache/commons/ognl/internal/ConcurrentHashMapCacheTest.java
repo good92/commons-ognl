@@ -21,6 +21,7 @@
 
 package org.apache.commons.ognl.internal;
 
+import org.apache.commons.ognl.OgnlCache;
 import org.apache.commons.ognl.internal.entry.CacheEntryFactory;
 import org.apache.commons.ognl.test.objects.Bean2;
 import org.junit.Test;
@@ -81,6 +82,8 @@ public class ConcurrentHashMapCacheTest
     private class DummyEntryFactory
         implements CacheEntryFactory<CacheEntry, List<Method>>
     {
+        private OgnlCache cache;
+
         public List<Method> create( CacheEntry key )
             throws CacheException
         {
@@ -96,6 +99,12 @@ public class ConcurrentHashMapCacheTest
                 }
             }
             return list;
+        }
+
+        @Override
+        public void setOgnlCache(OgnlCache cache)
+        {
+            this.cache=cache;            
         }
     }
 }

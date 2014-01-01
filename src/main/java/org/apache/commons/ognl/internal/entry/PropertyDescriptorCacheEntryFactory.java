@@ -24,6 +24,7 @@ package org.apache.commons.ognl.internal.entry;
  */
 
 import org.apache.commons.ognl.ObjectIndexedPropertyDescriptor;
+import org.apache.commons.ognl.OgnlCache;
 import org.apache.commons.ognl.OgnlException;
 import org.apache.commons.ognl.OgnlRuntime;
 import org.apache.commons.ognl.internal.CacheException;
@@ -226,5 +227,12 @@ public class PropertyDescriptorCacheEntryFactory
         return result;
     }
 
+    private OgnlCache cache;
+
+    @Override
+    public void setOgnlCache(OgnlCache cache)
+    {
+        this.cache=cache;
+    }
 
 }

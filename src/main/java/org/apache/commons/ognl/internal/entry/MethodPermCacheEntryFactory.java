@@ -23,6 +23,7 @@ package org.apache.commons.ognl.internal.entry;
  * $Id$
  */
 
+import org.apache.commons.ognl.OgnlCache;
 import org.apache.commons.ognl.OgnlRuntime;
 import org.apache.commons.ognl.internal.CacheException;
 
@@ -43,7 +44,7 @@ public class MethodPermCacheEntryFactory
     {
         try
         {
-            securityManager.checkPermission( OgnlRuntime.getPermission( key ) );
+            securityManager.checkPermission( OgnlRuntime.getPermission( key, cache ) );
             return true;
         }
         catch ( SecurityException ex )
@@ -61,5 +62,12 @@ public class MethodPermCacheEntryFactory
     public SecurityManager getSecurityManager()
     {
         return securityManager;
+    }
+    private OgnlCache cache;
+
+    @Override
+    public void setOgnlCache(OgnlCache cache)
+    {
+        this.cache=cache;
     }
 }

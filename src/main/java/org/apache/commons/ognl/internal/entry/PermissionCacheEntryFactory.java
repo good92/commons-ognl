@@ -23,6 +23,7 @@ package org.apache.commons.ognl.internal.entry;
  * $Id$
  */
 
+import org.apache.commons.ognl.OgnlCache;
 import org.apache.commons.ognl.OgnlInvokePermission;
 import org.apache.commons.ognl.internal.CacheException;
 
@@ -37,6 +38,13 @@ public class PermissionCacheEntryFactory
     {
         return new OgnlInvokePermission(
             "invoke." + key.method.getDeclaringClass().getName() + "." + key.method.getName() );
+    }
+    private OgnlCache cache;
+
+    @Override
+    public void setOgnlCache(OgnlCache cache)
+    {
+        this.cache=cache;
     }
 }
 
