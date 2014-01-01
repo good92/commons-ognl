@@ -1,5 +1,7 @@
 package org.apache.commons.ognl;
 
+import org.apache.commons.ognl.enhance.OgnlExpressionCompiler;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,7 +22,7 @@ package org.apache.commons.ognl;
  */
 
 /**
- * Used by some of the {@link ognl.enhance.OgnlExpressionCompiler} logic to determine the object type of {@link Node}s
+ * Used by some of the {@link OgnlExpressionCompiler} logic to determine the object type of {@link Node}s
  * during expression evaluation.
  */
 public interface NodeType
