@@ -62,6 +62,8 @@ import java.util.Map;
  */
 public class OgnlRuntime
 {
+    private static OgnlRuntime2 rt=new OgnlRuntime2();
+    static OgnlRuntime2 getOgnlRuntime(){return rt;}
     /**
      * Constant expression used to indicate that a given method / property couldn't be found during reflection
      * operations.
@@ -122,18 +124,9 @@ public class OgnlRuntime
      */
     private static final String NULL_OBJECT_STRING = "<null>";
 
-    static OgnlCache cache = new OgnlCache();
-
     private static final PrimitiveTypes primitiveTypes = new PrimitiveTypes();
 
     private static final PrimitiveDefaults primitiveDefaults = new PrimitiveDefaults();
-
-    private static SecurityManager securityManager = System.getSecurityManager();
-
-    /**
-     * Expression compiler used by {@link Ognl#compileExpression(OgnlContext, Object, String)} calls.
-     */
-    private static OgnlExpressionCompiler compiler;
 
     /**
      * Used to provide primitive type equivalent conversions into and out of native / object types.
@@ -166,9 +159,10 @@ public class OgnlRuntime
      * care.
      * </p>
      */
+    @Deprecated
     public static void clearCache()
     {
-        cache.clear();
+        rt.clearCache();
     }
 
     public static String getNumericValueGetter( Class<?> type )
@@ -190,28 +184,15 @@ public class OgnlRuntime
     {
         return numericLiterals.get( type );
     }
-
+    @Deprecated
     public static void setCompiler( OgnlExpressionCompiler compiler )
     {
-        OgnlRuntime.compiler = compiler;
+        rt.setCompiler( compiler );
     }
-
+    @Deprecated
     public static OgnlExpressionCompiler getCompiler( OgnlContext ognlContext )
     {
-        if ( compiler == null )
-        {
-            try
-            {
-                OgnlRuntime.classForName( ognlContext, "javassist.ClassPool" );
-                compiler = new ExpressionCompiler();
-            }
-            catch ( ClassNotFoundException e )
-            {
-                throw new IllegalArgumentException(
-                    "Javassist library is missing in classpath! Please add missed dependency!", e );
-            }
-        }
-        return compiler;
+        return rt.getCompiler(ognlContext);
     }
 
     public static void compileExpression( OgnlContext context, Node expression, Object root )
@@ -377,10 +358,11 @@ public class OgnlRuntime
     /**
      * Returns the parameter types of the given method.
      */
+    @Deprecated
     public static Class<?>[] getParameterTypes( Method method )
         throws CacheException
     {
-        return cache.getMethodParameterTypes( method );
+        return rt.getParameterTypes(method);
     }
 
     /**
@@ -392,17 +374,11 @@ public class OgnlRuntime
      * @return Array of parameter types for the given method.
      * @throws org.apache.commons.ognl.internal.CacheException
      */
+    @Deprecated
     public static Class<?>[] findParameterTypes( Class<?> type, Method method )
         throws CacheException
     {
-        if ( type == null || type.getGenericSuperclass() == null || !ParameterizedType.class.isInstance(
-            type.getGenericSuperclass() ) || method.getDeclaringClass().getTypeParameters() == null )
-        {
-            return getParameterTypes( method );
-        }
-
-        GenericMethodParameterTypeCacheEntry key = new GenericMethodParameterTypeCacheEntry( method, type );
-        return cache.getGenericMethodParameterTypes( key );
+        return rt.findParameterTypes(type, method);
     }
 
     /**
@@ -411,10 +387,11 @@ public class OgnlRuntime
      * @return
      * @throws org.apache.commons.ognl.internal.CacheException
      */
+    @Deprecated
     public static Class<?>[] getParameterTypes( Constructor<?> constructor )
         throws CacheException
     {
-        return cache.getParameterTypes( constructor );
+        return rt.getParameterTypes( constructor );
     }
 
     /**
@@ -422,9 +399,10 @@ public class OgnlRuntime
      *
      * @return SecurityManager for OGNL
      */
+    @Deprecated
     public static SecurityManager getSecurityManager()
     {
-        return securityManager;
+        return rt.getSecurityManager();
     }
 
     /**
@@ -432,10 +410,10 @@ public class OgnlRuntime
      *
      * @param securityManager SecurityManager to set
      */
+    @Deprecated
     public static void setSecurityManager( SecurityManager securityManager )
     {
-        OgnlRuntime.securityManager = securityManager;
-        cache.setSecurityManager(securityManager);
+        rt.setSecurityManager( securityManager );
     }
 
     /**
@@ -444,49 +422,18 @@ public class OgnlRuntime
      * @return
      * @throws org.apache.commons.ognl.internal.CacheException
      */
+    @Deprecated
     public static Permission getPermission( Method method )
         throws CacheException
     {
-        PermissionCacheEntry key = new PermissionCacheEntry( method );
-        return cache.getInvokePermission( key );
+        return rt.getPermission( method );
     }
 
+    @Deprecated
     public static Object invokeMethod( Object target, Method method, Object[] argsArray )
         throws InvocationTargetException, IllegalAccessException, CacheException
     {
-        Object result;
-
-        if ( securityManager != null && !cache.getMethodPerm( method ) )
-        {
-            throw new IllegalAccessException( "Method [" + method + "] cannot be accessed." );
-        }
-
-        MethodAccessEntryValue entry = cache.getMethodAccess( method );
-        if ( !entry.isAccessible() )
-        {
-            // only synchronize method invocation if it actually requires it
-            synchronized ( method )
-            {
-
-                if ( entry.isNotPublic() && !entry.isAccessible() )
-                {
-                    method.setAccessible( true );
-                }
-
-                result = method.invoke( target, argsArray );
-
-                if ( !entry.isAccessible() )
-                {
-                    method.setAccessible( false );
-                }
-            }
-        }
-        else
-        {
-            result = method.invoke( target, argsArray );
-        }
-
-        return result;
+        return rt.invokeMethod( target, method, argsArray );
     }
 
     /**
@@ -1131,9 +1078,10 @@ public class OgnlRuntime
         return result;
     }
 
+    @Deprecated
     public static List<Constructor<?>> getConstructors( Class<?> targetClass )
     {
-        return cache.getConstructor( targetClass );
+        return rt.getConstructors( targetClass );
     }
 
     /**
@@ -1141,13 +1089,10 @@ public class OgnlRuntime
      * @param staticMethods if true (false) returns only the (non-)static methods
      * @return Returns the map of methods for a given class
      */
+    @Deprecated
     public static Map<String, List<Method>> getMethods( Class<?> targetClass, boolean staticMethods )
     {
-        DeclaredMethodCacheEntry.MethodType type = staticMethods ?
-            DeclaredMethodCacheEntry.MethodType.STATIC :
-            DeclaredMethodCacheEntry.MethodType.NON_STATIC;
-        DeclaredMethodCacheEntry key = new DeclaredMethodCacheEntry( targetClass, type );
-        return cache.getMethod( key );
+        return rt.getMethods( targetClass, staticMethods );
     }
 
     public static List<Method> getMethods( Class<?> targetClass, String name, boolean staticMethods )
@@ -1155,9 +1100,10 @@ public class OgnlRuntime
         return getMethods( targetClass, staticMethods ).get( name );
     }
 
+    @Deprecated
     public static Map<String, Field> getFields( Class<?> targetClass )
     {
-        return cache.getField( targetClass );
+        return rt.getFields( targetClass );
     }
 
     public static Field getField( Class<?> inClass, String name )
@@ -1343,31 +1289,10 @@ public class OgnlRuntime
      * @return Returns the list of (g)setter of a class for a given property name
      * @
      */
+    @Deprecated
     public static List<Method> getDeclaredMethods( Class<?> targetClass, String propertyName, boolean findSets )
     {
-        String baseName = Character.toUpperCase( propertyName.charAt( 0 ) ) + propertyName.substring( 1 );
-        List<Method> methods = new ArrayList<Method>();
-        List<String> methodNames = new ArrayList<String>( 2 );
-        if ( findSets )
-        {
-            methodNames.add( SET_PREFIX + baseName );
-        }
-        else
-        {
-            methodNames.add( IS_PREFIX + baseName );
-            methodNames.add( GET_PREFIX + baseName );
-        }
-        for ( String methodName : methodNames )
-        {
-            DeclaredMethodCacheEntry key = new DeclaredMethodCacheEntry( targetClass );
-            List<Method> methodList = cache.getMethod( key ).get( methodName );
-            if ( methodList != null )
-            {
-                methods.addAll( methodList );
-            }
-        }
-
-        return methods;
+        return rt.getDeclaredMethods( targetClass, propertyName, findSets );
     }
 
     /**
@@ -1474,10 +1399,11 @@ public class OgnlRuntime
      * @throws IntrospectionException on errors using {@link Introspector}.
      * @throws OgnlException          On general errors.
      */
+    @Deprecated
     public static Map<String, PropertyDescriptor> getPropertyDescriptors( Class<?> targetClass )
         throws IntrospectionException, OgnlException
     {
-        return cache.getPropertyDescriptor( targetClass );
+        return rt.getPropertyDescriptors( targetClass );
     }
 
     /**
@@ -1536,48 +1462,56 @@ public class OgnlRuntime
         return result;
     }
 
+    @Deprecated
     public static void setMethodAccessor( Class<?> clazz, MethodAccessor accessor )
     {
-        cache.setMethodAccessor( clazz, accessor );
+        rt.setMethodAccessor( clazz, accessor );
     }
 
+    @Deprecated
     public static MethodAccessor getMethodAccessor( Class<?> clazz )
         throws OgnlException
     {
-        return cache.getMethodAccessor( clazz );
+        return rt.getMethodAccessor( clazz );
     }
 
+    @Deprecated
     public static void setPropertyAccessor( Class<?> clazz, PropertyAccessor accessor )
     {
-        cache.setPropertyAccessor( clazz, accessor );
+        rt.setPropertyAccessor( clazz, accessor );
     }
 
+    @Deprecated
     public static PropertyAccessor getPropertyAccessor( Class<?> clazz )
         throws OgnlException
     {
-        return cache.getPropertyAccessor( clazz );
+        return rt.getPropertyAccessor( clazz );
     }
 
+    @Deprecated
     public static ElementsAccessor getElementsAccessor( Class<?> clazz )
         throws OgnlException
     {
-        return cache.getElementsAccessor( clazz );
+        return rt.getElementsAccessor( clazz );
     }
 
+    @Deprecated
     public static void setElementsAccessor( Class<?> clazz, ElementsAccessor accessor )
     {
-        cache.setElementsAccessor( clazz, accessor );
+        rt.setElementsAccessor( clazz, accessor );
     }
 
+    @Deprecated
     public static NullHandler getNullHandler( Class<?> clazz )
         throws OgnlException
     {
-        return cache.getNullHandler( clazz );
+        return rt.getNullHandler( clazz );
     }
 
+    @Deprecated
     public static void setNullHandler( Class<?> clazz, NullHandler handler )
     {
-        cache.setNullHandler( clazz, handler );
+        rt.setNullHandler( clazz, handler );
     }
 
     public static Object getProperty( OgnlContext context, Object source, Object name )
@@ -1735,9 +1669,10 @@ public class OgnlRuntime
      *
      * @param inspector The inspector instance that will be registered with all internal cache instances.
      */
+    @Deprecated
     public static void setClassCacheInspector( ClassCacheInspector inspector )
     {
-        cache.setClassCacheInspector( inspector );
+        rt.setClassCacheInspector( inspector );
     }
 
     public static Method getMethod( OgnlContext context, Class<?> target, String name, Node[] children,
