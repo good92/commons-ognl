@@ -48,6 +48,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Utility class used by internal OGNL API to do various things like:
@@ -62,6 +64,8 @@ import java.util.Map;
  */
 public class OgnlRuntime
 {
+    private static final Logger log=Logger.getLogger(OgnlRuntime.class.getName());
+    
     /**
      * Constant expression used to indicate that a given method / property couldn't be found during reflection
      * operations.
@@ -127,8 +131,6 @@ public class OgnlRuntime
     private static final PrimitiveTypes primitiveTypes = new PrimitiveTypes();
 
     private static final PrimitiveDefaults primitiveDefaults = new PrimitiveDefaults();
-
-    private static SecurityManager securityManager = System.getSecurityManager();
 
     /**
      * Expression compiler used by {@link Ognl#compileExpression(OgnlContext, Object, String)} calls.
@@ -421,20 +423,24 @@ public class OgnlRuntime
      * Gets the SecurityManager that OGNL uses to determine permissions for invoking methods.
      *
      * @return SecurityManager for OGNL
+     * @deprecated  use {@link OgnlCache#getSecurityManager()}
      */
+    @Deprecated
     public static SecurityManager getSecurityManager()
     {
-        return securityManager;
+        log.log(Level.WARNING,"@deprecated  use {@link OgnlCache.#getSecurityManager()}", new Throwable());
+        return cache.getSecurityManager();
     }
 
     /**
      * Sets the SecurityManager that OGNL uses to determine permissions for invoking methods.
      *
      * @param securityManager SecurityManager to set
+     * @deprecated use {@link OgnlCache#setSecurityManager(SecurityManager)}
      */
     public static void setSecurityManager( SecurityManager securityManager )
     {
-        OgnlRuntime.securityManager = securityManager;
+        log.log(Level.WARNING,"@deprecated use {@link OgnlCache.#setSecurityManager(SecurityManager)}", new Throwable());
         cache.setSecurityManager(securityManager);
     }
 
@@ -456,7 +462,7 @@ public class OgnlRuntime
     {
         Object result;
 
-        if ( securityManager != null && !cache.getMethodPerm( method ) )
+        if ( cache.getSecurityManager() !=null && !cache.getMethodPerm( method ) )
         {
             throw new IllegalAccessException( "Method [" + method + "] cannot be accessed." );
         }

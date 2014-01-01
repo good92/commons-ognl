@@ -57,4 +57,9 @@ public class MethodPermCacheEntryFactory
     {
         this.securityManager = securityManager;
     }
+
+    public SecurityManager getSecurityManager()
+    {
+        return securityManager;
+    }
 }

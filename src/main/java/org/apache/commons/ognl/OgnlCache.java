@@ -304,4 +304,9 @@ public class OgnlCache {
     {
         methodPermCacheEntryFactory.setSecurityManager( securityManager );
     }
+    
+    public SecurityManager getSecurityManager()
+    {
+        return methodPermCacheEntryFactory.getSecurityManager();
+    }
 }
