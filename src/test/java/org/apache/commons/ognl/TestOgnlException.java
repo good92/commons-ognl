@@ -38,7 +38,7 @@ public class TestOgnlException
         }
         catch ( OgnlException e )
         {
-            assertTrue( NumberFormatException.class.isInstance( e.getReason() ) );
+            assertTrue( NumberFormatException.class.isInstance( e.getCause() ) );
         }
     }
 

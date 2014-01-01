@@ -30,40 +30,18 @@ public class OgnlException
     extends Exception
 {
     private static final Logger log=Logger.getLogger(OgnlException.class.getName());
-    // cache initCause method - if available..to be used during throwable constructor
-    // to properly setup superclass.
 
     private static final long serialVersionUID = -842845048743721078L;
-
-    static Method initCause;
-    static
-    {
-        try
-        {
-            initCause = OgnlException.class.getMethod( "initCause", new Class[] { Throwable.class } );
-        }
-        catch ( NoSuchMethodException e )
-        {
-            /** ignore */
-        }
-    }
 
     /**
      * The root evaluation of the expression when the exception was thrown
      */
     private Evaluation evaluation;
 
-    /**
-     * Why this exception was thrown.
-     * 
-     * @serial
-     */
-    private Throwable reason;
-
     /** Constructs an OgnlException with no message or encapsulated exception. */
     public OgnlException()
     {
-        this( null, null );
+        super();
     }
 
     /**
@@ -73,41 +51,37 @@ public class OgnlException
      */
     public OgnlException( String msg )
     {
-        this( msg, null );
+        super( msg );
     }
 
     /**
-     * Constructs an OgnlException with the given message and encapsulated exception.
-     * 
-     * @param msg the exception's detail message
-     * @param reason the encapsulated exception
+     * Constructs a new OgnlException  with the specified detail message and
+     * cause.  <p>Note that the detail message associated with
+     * {@code cause} is <i>not</i> automatically incorporated in
+     * this exception's detail message.
+     *
+     * @param  message the detail message (which is saved for later retrieval
+     *         by the {@link #getMessage()} method).
+     * @param  cause the cause (which is saved for later retrieval by the
+     *         {@link #getCause()} method).  (A <tt>null</tt> value is
+     *         permitted, and indicates that the cause is nonexistent or
+     *         unknown.)
      */
-    public OgnlException( String msg, Throwable reason )
+    public OgnlException( String msg, Throwable cause )
     {
-        super( msg );
-        this.reason = reason;
-
-        if ( initCause != null )
-        {
-            try
-            {
-                initCause.invoke( this, reason );
-            }
-            catch ( Exception ignored )
-            {
-                /** ignore */
-            }
-        }
+        super(msg,cause);
     }
 
     /**
      * Returns the encapsulated exception, or null if there is none.
      * 
      * @return the encapsulated exception
+     * @deprecated  As of release 4.0, replaced by {@link #getCause()}
      */
+    @Deprecated
     public Throwable getReason()
     {
-        return reason;
+        return getCause();
     }
 
     /**
@@ -128,22 +102,6 @@ public class OgnlException
     public void setEvaluation( Evaluation value )
     {
         evaluation = value;
-    }
-
-    /**
-     * Returns a string representation of this exception.
-     * 
-     * @return a string representation of this exception
-     */
-    @Override
-    public String toString()
-    {
-        if ( reason == null )
-        {
-            return super.toString();
-        }
-
-        return super.toString() + " [" + reason + "]";
     }
 
     /**
