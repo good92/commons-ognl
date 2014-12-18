@@ -40,7 +40,7 @@ public class MethodTest
 
     private static Object[][] TESTS = { { "hashCode()", new Integer( ROOT.hashCode() ) },
         { "getBooleanValue() ? \"here\" : \"\"", "" }, { "getValueIsTrue(!false) ? \"\" : \"here\" ", "" },
-        { "messages.format('ShowAllCount', one)", "foo" },
+        { "messages.format('ShowAllCount', one)", "first" },
         { "getTestValue(@org.apache.commons.ognl.test.objects.SimpleEnum@ONE.value)", new Integer( 2 ) },
         { "@org.apache.commons.ognl.test.MethodTest@getA().isProperty()", Boolean.FALSE },
         { "isDisabled()", Boolean.TRUE }, { "isEditorDisabled()", Boolean.FALSE },
