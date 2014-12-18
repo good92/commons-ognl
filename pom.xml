@@ -22,7 +22,7 @@ limitations under the License.
  <parent>
    <groupId>org.apache.commons</groupId>
    <artifactId>commons-parent</artifactId>
-   <version>22</version>
+   <version>28</version>
  </parent>
 
   <groupId>org.apache.commons</groupId>
@@ -33,7 +33,7 @@ limitations under the License.
   <name>Apache Commons OGNL - Object Graph Navigation Library</name>
   <description>The Apache Commons OGNL library is a Java development framework for Object-Graph Navigation Language,
   plus other extras such as list projection and selection and lambda expressions.</description>
-  <url>http://commons.apache.org/ognl/</url>
+  <url>http://commons.apache.org/proper/commons-ognl/</url>
   <inceptionYear>1997</inceptionYear>
   <organization>
     <name>The Apache Software Foundation</name>
@@ -41,7 +41,7 @@ limitations under the License.
   </organization>
   <licenses>
     <license>
-      <name>The Apache Software License, Version 2.0</name>
+      <name>The Apache License, Version 2.0</name>
       <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
       <distribution>repo</distribution>
     </license>
@@ -51,7 +51,7 @@ limitations under the License.
     <developer>
       <name>Antonio Petrelli</name>
       <id>apetrelli</id>
-      <email>apetrelli at apache dot org</email>
+      <email>apetrelli@apache.org</email>
       <roles>
         <role>Committer</role>
         <role>Emeritus</role>
@@ -60,7 +60,7 @@ limitations under the License.
     <developer>
       <name>Christian Grobmeier</name>
       <id>grobmeier</id>
-      <email>grobmeier at apache dot org</email>
+      <email>grobmeier@apache.org</email>
       <roles>
         <role>PMC Member</role>
         <role>Committer</role>
@@ -69,7 +69,7 @@ limitations under the License.
     <developer>
       <name>Jesse Kuhnert</name>
       <id>jkuhnert</id>
-      <email>jkuhnert at apache dot org</email>
+      <email>jkuhnert@apache.org</email>
       <roles>
         <role>Committer</role>
       </roles>
@@ -77,7 +77,7 @@ limitations under the License.
     <developer>
       <name>Jochen Wiedmann</name>
       <id>jochen</id>
-      <email>jochen at apache dot org</email>
+      <email>jochen@apache.org</email>
       <roles>
         <role>PMC Member</role>
         <role>Committer</role>
@@ -86,7 +86,7 @@ limitations under the License.
     <developer>
       <name>Lukasz Lenart</name>
       <id>lukaszlenart</id>
-      <email>lukaszlenart at apache dot org</email>
+      <email>lukaszlenart@apache.org</email>
       <roles>
         <role>Committer</role>
       </roles>
@@ -94,7 +94,7 @@ limitations under the License.
     <developer>
       <name>Olivier Lamy</name>
       <id>olamy</id>
-      <email>olamy at apache dot org</email>
+      <email>olamy@apache.org</email>
       <roles>
         <role>Committer</role>
       </roles>
@@ -102,7 +102,7 @@ limitations under the License.
     <developer>
       <name>Luke Blanshard</name>
       <id>leadpipe</id>
-      <email>leadpipe at apache dot org</email>
+      <email>leadpipe@apache.org</email>
       <roles>
         <role>Committer</role>
       </roles>
@@ -110,7 +110,7 @@ limitations under the License.
     <developer>
       <name>Marc Andrew Davidson</name>
       <id>javadrewd</id>
-      <email>javadrewd at apache dot org</email>
+      <email>javadrewd@apache.org</email>
       <roles>
         <role>Committer</role>
       </roles>
@@ -118,7 +118,7 @@ limitations under the License.
     <developer>
       <name>Maurizio Cucchiara</name>
       <id>mcucchiara</id>
-      <email>mcucchiara at apache dot org</email>
+      <email>mcucchiara@apache.org</email>
       <roles>
         <role>Committer</role>
       </roles>
@@ -126,7 +126,7 @@ limitations under the License.
     <developer>
       <name>Simone Tripodi</name>
       <id>simonetripodi</id>
-      <email>simonetripodi at apache dot org</email>
+      <email>simonetripodi@apache.org</email>
       <roles>
         <role>PMC Member</role>
         <role>Committer</role>
@@ -135,7 +135,7 @@ limitations under the License.
     <developer>
       <name>Upayavira</name>
       <id>upayavira</id>
-      <email>upayavira at apache dot org</email>
+      <email>upayavira@apache.org</email>
       <roles>
         <role>Committer</role>
       </roles>
@@ -145,6 +145,10 @@ limitations under the License.
   <contributors>
     <contributor>
       <name>Daniel Pitts</name>
+    </contributor>
+    <contributor>
+      <name>Adrian Cumiskey</name>
+      <email>acumiskey@apache.org</email>
     </contributor>
   </contributors>
 
@@ -168,18 +172,46 @@ limitations under the License.
     </site>
   </distributionManagement>
 
+  <pluginRepositories>
+      <pluginRepository>
+          <id>central</id>
+          <name>Maven Plugin Repository</name>
+          <url>https://repo1.maven.org/maven2/plugins</url>
+          <layout>default</layout>
+          <releases>
+              <enabled>true</enabled>
+          </releases>
+          <snapshots>
+              <enabled>false</enabled>
+          </snapshots>
+      </pluginRepository>
+
+      <pluginRepository>
+          <id>Codehaus Snapshots</id>
+          <url>http://nexus.codehaus.org/</url>
+          <snapshots>
+              <enabled>true</enabled>
+          </snapshots>
+          <releases>
+              <enabled>true</enabled>
+          </releases>
+      </pluginRepository>
+  </pluginRepositories>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <commons.javadoc.version>2.8</commons.javadoc.version>
+    <commons.javadoc.version>2.10.1</commons.javadoc.version>
     <maven.compile.source>1.5</maven.compile.source>
     <maven.compile.target>1.5</maven.compile.target>
+
+    <commons.scmPubCheckoutDirectory>site-content</commons.scmPubCheckoutDirectory>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.10</version>
+      <version>4.12</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -189,9 +221,22 @@ limitations under the License.
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>javassist</groupId>
+      <groupId>org.javassist</groupId>
       <artifactId>javassist</artifactId>
-      <version>3.12.1.GA</version>
+      <version>3.18.2-GA</version> <!-- new version expected at end of december 2014 -->
+    </dependency>
+    <dependency>
+      <groupId>com.carrotsearch</groupId>
+      <artifactId>junit-benchmarks</artifactId>
+      <classifier>jdk15</classifier>
+      <version>0.7.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>ognl</groupId>
+      <artifactId>ognl</artifactId>
+      <version>3.0.8</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 
@@ -200,7 +245,7 @@ limitations under the License.
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.3.2</version>
+        <version>3.2</version>
         <configuration>
           <source>${maven.compile.source}</source>
           <target>${maven.compile.target}</target>
@@ -220,12 +265,10 @@ limitations under the License.
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.8.1</version>
+        <version>2.18</version>
         <configuration>
           <excludes>
-            <exclude>**/OgnlTestCase.java</exclude>
             <exclude>**/*$*</exclude>
           </excludes>
         </configuration>
@@ -233,7 +276,7 @@ limitations under the License.
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>2.3.1</version>
+        <version>2.5</version>
         <configuration>
           <archive>
             <compress>true</compress>
@@ -244,10 +287,11 @@ limitations under the License.
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-clean-plugin</artifactId>
-        <version>2.4.1</version>
+        <version>2.6.1</version>
       </plugin>
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
+        <version>2.5.2</version>
         <configuration>
           <descriptors>
             <descriptor>${basedir}/src/main/assembly/bin.xml</descriptor>
@@ -279,17 +323,17 @@ limitations under the License.
           </goals>
         </execution>
         </executions>
-       </plugin>
+      </plugin>
     </plugins>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-idea-plugin</artifactId>
-          <version>2.2</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
+      <!--  <pluginManagement>
+         <plugins>
+           http://maven.apache.org/plugins/maven-idea-plugin/ RETIRED
+           <plugin>
+             <groupId>org.apache.maven.plugins</groupId>
+             <artifactId>maven-idea-plugin</artifactId>
+             <version>2.2.1</version>
+           </plugin>
+    </pluginManagement>  -->
   </build>
 
   <profiles>
@@ -307,7 +351,7 @@ limitations under the License.
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-changes-plugin</artifactId>
-            <version>2.3</version>
+            <version>2.11</version>
             <configuration>
               <xmlPath>${basedir}/src/changes/changes.xml</xmlPath>
               <issueLinkTemplate>%URL%/%ISSUE%</issueLinkTemplate>
@@ -323,7 +367,7 @@ limitations under the License.
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-checkstyle-plugin</artifactId>
-            <version>2.6</version>
+            <version>2.7</version>
             <configuration>
               <configLocation>config/maven_checks.xml</configLocation>
               <headerLocation>config/maven-header.txt</headerLocation>
@@ -333,21 +377,21 @@ limitations under the License.
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>findbugs-maven-plugin</artifactId>
-            <version>2.3.1</version>
+            <version>3.0.1-SNAPSHOT</version> <!-- 2.13 -->
             <configuration>
               <threshold>Normal</threshold>
               <effort>Default</effort>
-              <!--  <excludeFilterFile>${basedir}/findbugs-exclude-filter.xml</excludeFilterFile> -->
+              <excludeFilterFile>findbugs-exclude-filter.xml</excludeFilterFile>
            </configuration>
           </plugin>
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>cobertura-maven-plugin</artifactId>
-            <version>2.4</version>
+            <version>2.6</version>
           </plugin>
           <plugin>
             <artifactId>maven-pmd-plugin</artifactId>
-            <version>2.3</version>
+            <version>3.3</version>
             <configuration>
               <targetJdk>${maven.compile.target}</targetJdk>
             </configuration>
@@ -376,7 +420,7 @@ limitations under the License.
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>javancss-maven-plugin</artifactId>
-            <version>2.0</version>
+            <version>2.1</version>
           </plugin>
           <plugin>
             <groupId>org.codehaus.sonar-plugins</groupId>
@@ -386,8 +430,176 @@ limitations under the License.
               <sonarHostURL>https://analysis.apache.org/</sonarHostURL>
             </configuration>
           </plugin>
+          <plugin>
+            <groupId>org.apache.rat</groupId>
+            <artifactId>apache-rat-plugin</artifactId>
+            <configuration>
+              <useDefaultExcludes>true</useDefaultExcludes>
+              <includes>
+                <include>src/**/*</include>
+              </includes>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>clirr-maven-plugin</artifactId>
+          </plugin>
         </plugins>
       </reporting>
     </profile>
+
+    <profile>
+      <id>benchmarks</id>
+      <activation>
+        <property>
+          <name>runBenchmarks</name>
+          <value>true</value>
+        </property>
+      </activation>
+
+      <dependencies>
+        <dependency>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-api</artifactId>
+          <version>1.6.6</version>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>com.h2database</groupId>
+          <artifactId>h2</artifactId>
+          <version>1.3.176</version>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>com.carrotsearch</groupId>
+          <artifactId>junit-benchmarks</artifactId>
+          <classifier>jdk15</classifier>
+          <version>0.7.2</version>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+
+      <build>
+        <testResources>
+          <testResource>
+            <directory>${basedir}/src/benchmarks/resources</directory>
+          </testResource>
+        </testResources>
+
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>build-helper-maven-plugin</artifactId>
+            <version>1.9.1</version>
+            <executions>
+              <execution>
+                <id>add-test-source</id>
+                <phase>generate-test-sources</phase>
+                <goals>
+                  <goal>add-test-source</goal>
+                </goals>
+                <configuration>
+                  <sources>
+                    <source>${basedir}/src/benchmarks/java</source>
+                  </sources>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+
+          <plugin>
+            <artifactId>maven-surefire-plugin</artifactId>
+             <version>2.18</version>
+            <configuration>
+              <systemPropertyVariables>
+                <jub.consumers>CONSOLE,XML,H2</jub.consumers>
+                <jub.db.file>${project.build.directory}/benchmarks/database</jub.db.file>
+                <jub.xml.file>${project.build.directory}/benchmarks.xml</jub.xml.file>
+                <jub.charts.dir>${project.build.directory}/site</jub.charts.dir>
+              </systemPropertyVariables>
+              <argLine>-Xmx512m -Xms512m</argLine>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>setup-checkout</id>
+      <activation>
+        <file>
+          <missing>site-content</missing>
+        </file>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>1.7</version>
+            <executions>
+              <execution>
+                <id>prepare-checkout</id>
+                <phase>pre-site</phase>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+                <configuration>
+                  <tasks>
+                    <exec executable="svn">
+                      <arg line="checkout ${commons.scmPubUrl} ${commons.scmPubCheckoutDirectory}" />
+                    </exec>
+                    <!-- in case of paths to ignore (added manually) -->
+                    <!--
+                    <exec executable="svn">
+                      <arg line="update - -set-depth exclude ${commons.scmPubCheckoutDirectory}/javadocs" />
+                    </exec>
+
+                    <pathconvert pathsep=" " property="dirs">
+                      <dirset dir="${commons.scmPubCheckoutDirectory}" includes="*" />
+                    </pathconvert>
+                    <exec executable="svn">
+                      <arg line="update - -set-depth infinity ${dirs}" />
+                    </exec>
+                    -->
+                    <exec executable="svn">
+                      <arg line="update" />
+                    </exec>
+                  </tasks>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
   </profiles>
+
+    <!--
+       http://mvnrepository.com/artifact/org.apache.maven.surefire/surefire-junit4/2.18
+       mvn install:install-file -DgroupId=org.apache.maven.surefire -DartifactId=surefire-junit4 -Dversion=2.18 -Dpackaging=jar -Dfile=/path/to/file
+
+      Fails on 1 test: org.apache.commons.ognl.test.MethodTest runTest[4]
+         { "messages.format('ShowAllCount', new Object[] {'one'})", "foo" },
+
+         Failed tests:
+           MethodTest>OgnlTestCase.runTest:217->OgnlTestCase.assertEquals:196 expected:<f[irst]> but was:<f[oo]>
+           Tests run: 745, Failures: 1, Errors: 0, Skipped: 0
+
+       private static Object[][] TESTS = {
+        { "hashCode()", new Integer( ROOT.hashCode() ) },
+        { "getBooleanValue() ? \"here\" : \"\"", "" }, { "getValueIsTrue(!false) ? \"\" : \"here\" ", "" },
+        { "one", 1 },
+        { "messages.format('ShowAllCount', 'one')", "first" },
+        { "messages.format('ShowAllCount', new Object[] {'one'})", "foo" },
+        { "getTestValue(@org.apache.commons.ognl.test.objects.SimpleEnum@ONE.value)", new Integer( 2 ) },
+        { "@org.apache.commons.ognl.test.MethodTest@getA().isProperty()", Boolean.FALSE },
+        { "isDisabled()", Boolean.TRUE }, { "isEditorDisabled()", Boolean.FALSE },
+        { LIST, "addValue(name)", Boolean.TRUE }, { "getDisplayValue(methodsTest.allowDisplay)", "test" },
+        { "isThisVarArgsWorking(three, rootValue)", Boolean.TRUE },
+        { GENERIC, "service.getFullMessageFor(value, null)", "Halo 3" } };
+
+        https://github.com/pdinc-oss/commons-ognl/commit/9cd7c619e5a731e9f80c6269be800b2004411879
+
+            > patch 2
+    -->
 </project>
